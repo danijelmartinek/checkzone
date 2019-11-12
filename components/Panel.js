@@ -1,11 +1,49 @@
 import React from "react";
-import { Text, View, Dimensions, Animated } from "react-native";
+import { View, Button, Dimensions, Animated, StyleSheet } from "react-native";
 
 import SlidingUpPanel from "rn-sliding-up-panel";
 
 const { height, width } = Dimensions.get("window");
 
-const styles = {
+class Panel extends React.Component {
+  
+  static defaultProps = {
+    draggableRange: { top: height, bottom: 30 }
+  };
+
+  _draggedValue = new Animated.Value(30);
+
+  render() {
+    const { top, bottom } = this.props.draggableRange;
+
+    return (
+      <View style={styles.container}>
+        <SlidingUpPanel
+          ref={c => (this._panel = c)}
+          draggableRange={{ top: top - 30, bottom: bottom }}
+          animatedValue={this._draggedValue}
+          snappingPoints={[200]}
+          height={height}
+          friction={1}
+          showBackdrop={false}
+        >
+          <View style={styles.panel}>
+              <View style={styles.hook}></View>
+              <View>
+                <Button
+                  style={{marginTop: 50}}
+                  title="Go to Tasks"
+                  onPress={() => this.props.navigation.navigate('Tasks')}
+                />
+              </View>
+          </View>
+        </SlidingUpPanel>
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     height: height,
@@ -15,44 +53,20 @@ const styles = {
     flex: 1,
     backgroundColor: "white",
     position: "relative",
-    backgroundColor: "#010014",
+    backgroundColor: "#101424",
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25
   },
-  textHeader: {
-    fontSize: 28,
-    color: "#FFF"
+
+  hook: {
+    height: 5,
+    marginTop: 25,
+    marginLeft: 50,
+    marginRight: 50,
+    borderRadius: 20,
+    backgroundColor: '#ffffff',
+    opacity: 0.2
   }
-};
-
-class Panel extends React.Component {
-  static defaultProps = {
-    draggableRange: { top: height, bottom: 50 }
-  };
-
-  _draggedValue = new Animated.Value(50);
-
-  render() {
-    const { top, bottom } = this.props.draggableRange;
-
-    return (
-      <View style={styles.container}>
-        <SlidingUpPanel
-          ref={c => (this._panel = c)}
-          draggableRange={{ top: top - 50, bottom: bottom }}
-          animatedValue={this._draggedValue}
-          snappingPoints={[300]}
-          height={height}
-          friction={1}
-          showBackdrop={false}
-        >
-          <View style={styles.panel}>
-            <View style={styles.container}>
-              <Text style={{position: 'relative', top: 0}}>Bottom sheet content</Text>
-            </View>
-          </View>
-        </SlidingUpPanel>
-      </View>
-    );
-  }
-}
+});
 
 export default Panel;
