@@ -1,7 +1,7 @@
-import * as React from "react";
-import { Text, View, StyleSheet } from "react-native";
-import Constants from "expo-constants";
-import * as Font from "expo-font";
+import * as React from 'react';
+import { Text, View, StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
+import * as Font from 'expo-font';
 
 import Button from 'react-native-button';
 
@@ -9,11 +9,11 @@ export default class Counter extends React.Component {
     state = {
         fontLoaded: false,
         time: {
-            seconds: "00",
-            minutes: "00",
-            hours: "00",
-            button: "Start"
-        }
+            seconds: '00',
+            minutes: '00',
+            hours: '00',
+            button: 'Start',
+        },
     };
 
     timer = false;
@@ -22,7 +22,7 @@ export default class Counter extends React.Component {
 
     async componentDidMount() {
         await Font.loadAsync({
-            'Speck': require("./../assets/fonts/Speck.otf"),
+            Speck: require('./../assets/fonts/Speck.otf'),
         });
 
         this.setState({ fontLoaded: true });
@@ -31,30 +31,30 @@ export default class Counter extends React.Component {
     startCounter = () => {
         let that = this;
         function Interval(fn, time) {
-            this.start = function () {
+            this.start = function() {
                 if (!this.isRunning()) {
                     that.setState(prevState => ({
                         time: {
                             ...prevState.time,
-                            button: 'Stop'
-                        }
+                            button: 'Stop',
+                        },
                     }));
                     that.timer = setInterval(fn, time);
                 }
             };
-            this.stop = function () {
+            this.stop = function() {
                 clearInterval(that.timer);
                 that.timer = false;
             };
-            this.isRunning = function () {
+            this.isRunning = function() {
                 return that.timer !== false;
             };
         }
 
         function pad(val) {
-            var valString = val + "";
+            var valString = val + '';
             if (valString.length < 2) {
-                return "0" + valString;
+                return '0' + valString;
             } else {
                 return valString;
             }
@@ -69,8 +69,8 @@ export default class Counter extends React.Component {
                     seconds: pad(that.totalSeconds % 60),
                     minutes: pad(parseInt(that.totalMinutes % 60)),
                     hours: pad(parseInt(that.totalMinutes / 60)),
-                    button: prevState.time.button
-                }
+                    button: prevState.time.button,
+                },
             }));
         }
 
@@ -80,16 +80,16 @@ export default class Counter extends React.Component {
             that.setState(prevState => ({
                 time: {
                     ...prevState.time,
-                    button: 'Start'
-                }
+                    button: 'Start',
+                },
             }));
         } else {
             i.start();
             that.setState(prevState => ({
                 time: {
                     ...prevState.time,
-                    button: 'Stop'
-                }
+                    button: 'Stop',
+                },
             }));
         }
     };
@@ -97,18 +97,28 @@ export default class Counter extends React.Component {
     render() {
         return (
             <View>
-                {
-                    this.state.fontLoaded ? (
-                        <View>
-                            <Text style={[styles.seconds, styles.fontSpeck]}>{this.state.time.seconds}</Text>
-                            <View style={[styles.minutesNHours]}>
-                                <Text style={[styles.hours, styles.fontSpeck]}>{this.state.time.hours} :</Text>
-                                <Text style={[styles.minutes, styles.fontSpeck]}> {this.state.time.minutes}</Text>
-                            </View>
+                {this.state.fontLoaded ? (
+                    <View>
+                        <Text style={[styles.seconds, styles.fontSpeck]}>
+                            {this.state.time.seconds}
+                        </Text>
+                        <View style={[styles.minutesNHours]}>
+                            <Text style={[styles.hours, styles.fontSpeck]}>
+                                {this.state.time.hours} :
+                            </Text>
+                            <Text style={[styles.minutes, styles.fontSpeck]}>
+                                {' '}
+                                {this.state.time.minutes}
+                            </Text>
                         </View>
-                    ) : null
-                }
-                <Button onPress={this.startCounter} style={[styles.toggleButton]}>{this.state.time.button}</Button>
+                    </View>
+                ) : null}
+                <Button
+                    onPress={this.startCounter}
+                    style={[styles.toggleButton]}
+                >
+                    {this.state.time.button}
+                </Button>
             </View>
         );
     }
@@ -117,45 +127,45 @@ export default class Counter extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: "center",
+        justifyContent: 'center',
         paddingTop: Constants.statusBarHeight,
-        backgroundColor: "#000914",
+        backgroundColor: '#000914',
         padding: 8,
     },
     fontSpeck: {
-        fontFamily: "Speck"
+        fontFamily: 'Speck',
     },
     minutesNHours: {
-        textAlign: "center",
+        textAlign: 'center',
         flex: 1,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'center',
         marginTop: 20,
-        marginBottom: 40
+        marginBottom: 40,
     },
     seconds: {
-        textAlign: "center",
+        textAlign: 'center',
         fontSize: 150,
         marginLeft: 15,
-        color: 'red'
+        color: 'red',
     },
     minutes: {
-        textAlign: "center",
+        textAlign: 'center',
         fontWeight: '400',
         fontSize: 40,
-        color: 'red'
+        color: 'red',
     },
     hours: {
-        textAlign: "center",
+        textAlign: 'center',
         fontWeight: '400',
         fontSize: 40,
-        color: 'red'
+        color: 'red',
     },
     toggleButton: {
         textTransform: 'uppercase',
         color: 'white',
         opacity: 0.5,
-        fontSize: 30
-    }
+        fontSize: 30,
+    },
 });
