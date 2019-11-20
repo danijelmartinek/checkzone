@@ -11,7 +11,6 @@ const styles = StyleSheet.create({
     horizontalLine: {
         borderBottomColor: '#ffffff',
         borderBottomWidth: 2,
-        marginTop: 40,
         marginLeft: 20,
         marginRight: 20,
         opacity: 0.1,

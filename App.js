@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, StatusBar } from 'react-native';
 import Constants from 'expo-constants';
 
 import { createAppContainer } from 'react-navigation';
@@ -12,6 +12,7 @@ class Main extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <StatusBar barStyle="light-content" />
                 <Counter></Counter>
                 <Panel navigation={this.props.navigation}></Panel>
             </View>

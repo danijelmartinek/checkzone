@@ -1,9 +1,11 @@
 import * as React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import Constants from 'expo-constants';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import * as Font from 'expo-font';
 
-import Button from 'react-native-button';
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from './dimensions.js';
 
 export default class Counter extends React.Component {
     state = {
@@ -113,59 +115,61 @@ export default class Counter extends React.Component {
                         </View>
                     </View>
                 ) : null}
-                <Button
-                    onPress={this.startCounter}
-                    style={[styles.toggleButton]}
+
+                <TouchableOpacity
+                    style={styles.toggleButtonContainer}
+                    activeOpacity={1}
+                    onPress={() => this.startCounter()}
                 >
-                    {this.state.time.button}
-                </Button>
+                    <Text style={styles.toggleButton}>
+                        {this.state.time.button}
+                    </Text>
+                </TouchableOpacity>
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        paddingTop: Constants.statusBarHeight,
-        backgroundColor: '#000914',
-        padding: 8,
-    },
     fontSpeck: {
         fontFamily: 'Speck',
     },
     minutesNHours: {
         textAlign: 'center',
-        flex: 1,
         alignItems: 'center',
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 20,
-        marginBottom: 40,
+        marginBottom: hp('1%'),
     },
     seconds: {
         textAlign: 'center',
-        fontSize: 150,
-        marginLeft: 15,
+        fontSize: hp('20%'),
+        lineHeight: hp('22%'),
+        marginLeft: wp('2%'),
         color: 'red',
     },
     minutes: {
         textAlign: 'center',
         fontWeight: '400',
-        fontSize: 40,
+        fontSize: hp('6%'),
+        lineHeight: hp('7%'),
         color: 'red',
     },
     hours: {
         textAlign: 'center',
         fontWeight: '400',
-        fontSize: 40,
+        fontSize: hp('6%'),
+        lineHeight: hp('7%'),
         color: 'red',
+    },
+    toggleButtonContainer: {
+        display: 'flex',
+        opacity: 0.5,
     },
     toggleButton: {
         textTransform: 'uppercase',
         color: 'white',
-        opacity: 0.5,
-        fontSize: 30,
+        fontSize: hp('5%'),
+        textAlign: 'center',
     },
 });

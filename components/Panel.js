@@ -14,20 +14,25 @@ import SlidingUpPanel from 'rn-sliding-up-panel';
 
 import Navigation from './Navigation.js';
 import HorizontalLine from './HorizontalLine.js';
-import CurrentLogInfo from './CurrentLogInfo.js';
 
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from './dimensions.js';
+import ProjectTitle from './ProjectTitle.js';
+import CurrentLogInfo from './CurrentLogInfo.js';
+import ProjectLogInfo from './ProjectLogInfo.js';
+
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from './dimensions.js';
 
 class Panel extends React.Component {
     static defaultProps = {
-        draggableRange: { top: hp('100%'), bottom: hp('7.5%')},
-	};
-	
+        draggableRange: { top: hp('100%'), bottom: hp('7.5%') },
+    };
 
     _draggedValue = new Animated.Value(hp('7.5%'));
 
     closePanelEvent = () => {
-        this._panel.show(hp('7.5%'));
+        this._panel.show({ toValue: hp('7.5%'), velocity: 3 });
     };
 
     togglePanel = () => {
@@ -48,7 +53,7 @@ class Panel extends React.Component {
         const { top, bottom } = this.props.draggableRange;
 
         return (
-            <View style={styles.container}>
+            <View style={styles.container} pointerEvents={'box-none'}>
                 <SlidingUpPanel
                     ref={c => (this._panel = c)}
                     draggableRange={{ top: top - hp('7.5%'), bottom: bottom }}
@@ -75,7 +80,11 @@ class Panel extends React.Component {
 
                         <HorizontalLine />
 
+                        <ProjectTitle></ProjectTitle>
+
                         <CurrentLogInfo></CurrentLogInfo>
+
+                        <ProjectLogInfo></ProjectLogInfo>
 
                         <View style={styles.settingsButtonContainer}>
                             <TouchableOpacity
@@ -125,7 +134,7 @@ const styles = StyleSheet.create({
 
     toggleHook: {
         height: hp('7.5%'),
-		width: wp('100%'),
+        width: wp('100%'),
     },
 
     settingsButtonContainer: {

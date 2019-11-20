@@ -15,7 +15,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 const { height, width } = Dimensions.get('window');
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from './dimensions.js';
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from './dimensions.js';
 
 class Navigation extends React.Component {
     onNavClick(screen) {
@@ -38,8 +41,8 @@ class Navigation extends React.Component {
                                 size={styles.iconSize}
                                 style={styles.navItemElement}
                             />
-                            <Text style={styles.navItemElement}>Logs</Text>
                         </View>
+                        <Text style={styles.navItemElementText}>Logs</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.navItemOpacity}
@@ -52,8 +55,8 @@ class Navigation extends React.Component {
                                 size={styles.iconSize}
                                 style={styles.navItemElement}
                             />
-                            <Text style={styles.navItemElement}>Projects</Text>
                         </View>
+                        <Text style={styles.navItemElementText}>Projects</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.navItemOpacity}
@@ -66,8 +69,8 @@ class Navigation extends React.Component {
                                 size={styles.iconSize}
                                 style={styles.navItemElement}
                             />
-                            <Text style={styles.navItemElement}>Tasks</Text>
                         </View>
+                        <Text style={styles.navItemElementText}>Tasks</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.navItemOpacity}
@@ -80,10 +83,10 @@ class Navigation extends React.Component {
                                 size={styles.iconSize}
                                 style={styles.navItemElement}
                             />
-                            <Text style={styles.navItemElement}>
-                                Statistics
-                            </Text>
                         </View>
+                        <Text style={styles.navItemElementText}>
+                            Statistics
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -96,8 +99,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: hp('1%'),
-        marginBottom: hp('2%')
+        marginBottom: hp('6%'),
     },
     navigation: {
         display: 'flex',
@@ -110,11 +112,16 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        margin: hp('2%'),
-        paddingTop: hp('4%'),
+        margin: hp('1%'),
+        paddingTop: hp('4.2%'),
     },
     navItemElement: {
         color: '#ffffff',
+    },
+    navItemElementText: {
+        color: '#ffffff',
+        textAlign: 'center',
+        paddingTop: hp('2%'),
     },
     navItemOpacity: {
         opacity: 0.4,
