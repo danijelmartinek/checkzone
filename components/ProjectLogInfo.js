@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     },
 
     logInfoItem: {
-        padding: hp('5%'),
+        padding: hp('2%'),
         paddingTop: 0,
         justifyContent: 'center',
         alignItems: 'center',
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
 
     logInfoItemText: {
         color: '#ffffff',
-        fontSize: hp('5%'),
+        fontSize: hp('4%'),
     },
 });
 

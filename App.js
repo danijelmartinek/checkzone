@@ -41,6 +41,16 @@ const AppNavigator = createStackNavigator(
 
         Tasks: {
             screen: Tasks,
+            navigationOptions: {
+                title: 'Tasks',
+                headerStyle: {
+                    backgroundColor: '#000914',
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
+            },
         },
     },
     {

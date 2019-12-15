@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     View,
+    Text,
     Dimensions,
     Animated,
     StyleSheet,
@@ -18,6 +19,7 @@ import HorizontalLine from './HorizontalLine.js';
 import ProjectTitle from './ProjectTitle.js';
 import CurrentLogInfo from './CurrentLogInfo.js';
 import ProjectLogInfo from './ProjectLogInfo.js';
+import ProjectTodo from './ProjectTodo.js';
 
 import {
     widthPercentageToDP as wp,
@@ -85,6 +87,9 @@ class Panel extends React.Component {
                         <CurrentLogInfo></CurrentLogInfo>
 
                         <ProjectLogInfo></ProjectLogInfo>
+                        
+                        <Text style={styles.projectTasks}>Tasks</Text>
+                        <ProjectTodo></ProjectTodo>
 
                         <View style={styles.settingsButtonContainer}>
                             <TouchableOpacity
@@ -139,8 +144,8 @@ const styles = StyleSheet.create({
 
     settingsButtonContainer: {
         position: 'absolute',
-        right: 0,
-        top: hp('87%'),
+        right: wp('2%'),
+        top: hp('50.5%'),
         width: wp('10%'),
     },
 
@@ -149,8 +154,14 @@ const styles = StyleSheet.create({
     },
 
     settingsButtonOpacity: {
-        opacity: 0.4,
+        opacity: 0.5,
     },
+
+    projectTasks: {
+        color: '#ffffff',
+        fontSize: hp('3%'),
+        padding: hp('1%')
+    }
 });
 
 export default Panel;

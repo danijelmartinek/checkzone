@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
 
     statusWrapper: {
         flexDirection: 'row',
-        margin: hp('6%'),
+        margin: hp('3%'),
     },
 
     statusDot: {
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
 
     statusText: {
         color: '#ffffff',
-        marginTop: hp('0.4%'),
+        marginTop: hp('0.2%'),
         fontSize: hp('2.5%'),
         textTransform: 'uppercase',
     },
@@ -92,8 +92,8 @@ const styles = StyleSheet.create({
     },
 
     currentLogText: {
-        fontSize: hp('1.8%'),
-        marginTop: hp('5%'),
+        fontSize: hp('1.5%'),
+        marginTop: hp('3%'),
         opacity: 0.5,
         color: '#ffffff',
         textTransform: 'uppercase',
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     },
 
     currentLogTextMain: {
-        fontSize: hp('3%'),
+        fontSize: hp('2%'),
         color: '#ffffff',
     },
 });

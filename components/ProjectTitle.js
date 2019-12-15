@@ -25,19 +25,19 @@ const styles = StyleSheet.create({
 
     projectTitleWrapper: {
         flexDirection: "row",
-        marginTop: hp('2%')
+        marginTop: hp('1.5%')
     },
 
     projectColor: {
-        width: hp('4%'),
-        height: hp('4%'),
+        width: hp('3%'),
+        height: hp('3%'),
         marginTop: hp('0.1%'),
         borderRadius: hp('1%'),
         backgroundColor: "purple"
     },
 
     projectTitle: {
-        fontSize: hp('3%'),
+        fontSize: hp('2.5%'),
         color: "#ffffff",
         marginLeft: 10
     }
