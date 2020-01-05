@@ -24,9 +24,11 @@
     "react-native-svg": "^9.13.3",
     "react-navigation": "^4.0.10",
     "react-navigation-stack": "^1.10.3",
-    "rn-sliding-up-panel": "^2.3.3"
+    "rn-sliding-up-panel": "^2.3.3",
+    "styled-components": "^4.4.1"
   },
   "devDependencies": {
+    "babel-plugin-module-resolver": "^4.0.0",
     "babel-preset-expo": "^7.1.0"
   },
   "private": true
