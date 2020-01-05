@@ -6,13 +6,14 @@ import {
     heightPercentageToDP as hp,
 } from '_utils/dimensions.js';
 
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
     faClock,
     faProjectDiagram,
     faChartBar,
     faTasks,
 } from '@fortawesome/free-solid-svg-icons';
+
+import NavButton from '_atoms/_panel/navButton';
 
 class Navigation extends React.Component {
     state = {
@@ -40,30 +41,17 @@ class Navigation extends React.Component {
         ]
     }
 
-    onNavClick(screen) {
-        this.props.navigation.navigate(screen);
-        this.props.closePanel();
-    }
-
     render() {
         return (
             <NavContainer>
                 <NavWrapper>
                     {this.state.navItems.map((navItem, i) => (
-                        <NavItemOpacity
-                            activeOpacity={1}
-                            onPress={() => this.onNavClick(navItem.view)}
+                        <NavButton 
+                            navigation={this.props.navigation} 
+                            item={navItem} 
                             key={i}
-                        >
-                            <NavItem>
-                                <FontAwesomeIcon
-                                    icon={navItem.icon}
-                                    size={32}
-                                    style={{color: '#ffffff'}}
-                                />
-                            </NavItem>
-                            <NavItemElementText>{navItem.text}</NavItemElementText>
-                        </NavItemOpacity >
+                            onPress={() => this.props.closePanel()}
+                        ></NavButton>
                     ))}
                 </NavWrapper>
             </NavContainer>
@@ -85,24 +73,6 @@ const NavWrapper = styled.View`
     justify-content: space-around;
     text-align: center;
     width: ${wp('100%') * 0.85};
-`;
-
-const NavItem = styled.View`
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-    margin ${hp('1%')};
-    padding-top: ${hp('4.2%')};
-`;
-
-const NavItemOpacity = styled.TouchableOpacity`
-    opacity: 0.4;
-`;
-
-const NavItemElementText = styled.Text`
-    color: #ffffff;
-    text-align: center;
-    padding-top: ${hp('2%')};
 `;
 
 export default Navigation;

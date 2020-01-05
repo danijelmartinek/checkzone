@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { View, PanResponder, ScrollView, Text, StyleSheet } from 'react-native';
+import { PanResponder } from 'react-native';
 
 import {
     widthPercentageToDP as wp,
@@ -9,7 +9,7 @@ import {
 
 import CheckBox from 'react-native-check-box'
 
-class ProjectTitle extends React.Component {
+class ProjectTodo extends React.Component {
 
     _onGrant() {
         this.setState({ dragPanel: false });
@@ -95,4 +95,4 @@ const TaskItemCheckBox = styled(CheckBox)`
     padding: 10px;
 `;
 
-export default ProjectTitle;
+export default ProjectTodo;

@@ -7,8 +7,8 @@ import {
     heightPercentageToDP as hp,
 } from '_utils/dimensions.js';
 
-import TimeDisplay from '_atoms/timeDisplay/index.js';
-import TextButton from '_atoms/textButton/index.js';
+import TimeDisplay from '_atoms/_counter/timeDisplay/index.js';
+import TextButton from '_atoms/_counter/textButton/index.js';
 
 class Counter extends React.Component {
     constructor(props) {

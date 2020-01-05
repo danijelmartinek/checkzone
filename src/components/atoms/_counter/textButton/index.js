@@ -6,7 +6,7 @@ import {
     heightPercentageToDP as hp,
 } from '_utils/dimensions.js';
 
-class ToggleTextButton extends React.Component {
+class TextButton extends React.Component {
     render() {
         return (
             <ToggleButtonContainer
@@ -33,4 +33,4 @@ const ToggleButton = styled.Text`
     text-align: center;
 `;
 
-export default ToggleTextButton;
+export default TextButton;

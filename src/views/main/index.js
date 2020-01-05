@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { View, StatusBar, StyleSheet } from 'react-native';
+import styled from 'styled-components';
+import { StatusBar } from 'react-native';
 import Constants from 'expo-constants';
 
 import Counter from '_molecules/counter/index.js';
@@ -8,23 +9,21 @@ import Panel from '_organisms/panel/index.js';
 class Main extends React.Component {
     render() {
         return (
-            <View style={styles.container}>
+            <MainContainer>
                 <StatusBar barStyle="light-content" />
                 <Counter></Counter>
                 <Panel navigation={this.props.navigation}></Panel>
-            </View>
+            </MainContainer>
         );
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        paddingTop: Constants.statusBarHeight,
-        backgroundColor: '#000914',
-        padding: 8,
-    },
-});
+const MainContainer = styled.View`
+    flex: 1;
+    justify-content: center;
+    padding-top: ${Constants.statusBarHeight};
+    background-color: #000914;
+    padding: 8px;
+`;
 
 export default Main;

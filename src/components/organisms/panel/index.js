@@ -1,36 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-    View,
     Animated,
     TouchableOpacity,
 } from 'react-native';
-
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCog } from '@fortawesome/free-solid-svg-icons';
-
-import SlidingUpPanel from 'rn-sliding-up-panel';
-
-import Navigation from '_molecules/panel/Navigation.js';
-import HorizontalLine from '_atoms/horizontalLine/index.js';
-
-import ProjectTitle from '_molecules/panel/ProjectTitle.js';
-import CurrentLogInfo from '_molecules/panel/CurrentLogInfo.js';
-import ProjectLogInfo from '_molecules/panel/ProjectLogInfo.js';
-import ProjectTodo from '_molecules/panel/ProjectTodo.js';
 
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from '_utils/dimensions.js';
 
+import SlidingUpPanel from 'rn-sliding-up-panel';
+
+import ProjectTitle from '_atoms/_panel/projectTitle/index.js';
+import SettingsButton from '_atoms/_panel/settingsButton/index.js';
+import HorizontalLine from '_atoms/horizontalLine/index.js';
+import Navigation from '_molecules/_panel/navigation/index.js';
+import CurrentLogInfo from '_molecules/_panel/currentLogInfo/index.js';
+import ProjectLogInfo from '_molecules/_panel/projectLogInfo/index.js';
+import ProjectTodo from '_molecules/_panel/projectTodo/index.js';
+
 class Panel extends React.Component {
     static defaultProps = {
         draggableRange: { top: hp('100%'), bottom: hp('7.5%') },
     };
-
     _draggedValue = new Animated.Value(hp('7.5%'));
-
     closePanelEvent = () => {
         this._panel.show({ toValue: hp('7.5%'), velocity: 3 });
     };
@@ -78,7 +72,7 @@ class Panel extends React.Component {
                             closePanel={this.closePanelEvent}
                         ></Navigation>
 
-                        <HorizontalLine />
+                        <HorizontalLine/>
 
                         <ProjectTitle></ProjectTitle>
 
@@ -90,18 +84,7 @@ class Panel extends React.Component {
                         <ProjectTodo></ProjectTodo>
 
                         <SettingsButtonContainer>
-                            <TouchableOpacity
-                                activeOpacity={1}
-                                style={{opacity: 0.5}}
-                            >
-                                <View>
-                                    <FontAwesomeIcon
-                                        icon={faCog}
-                                        size={24}
-                                        style={{color: '#ffffff'}}
-                                    />
-                                </View>
-                            </TouchableOpacity>
+                            <SettingsButton navigation={this.props.navigation}></SettingsButton>
                         </SettingsButtonContainer>
                     </PanelWrapper>
                 </SlidingUpPanel>
@@ -138,17 +121,17 @@ const Hook = styled.View`
     opacity: 0.2;
 `;
 
-const SettingsButtonContainer = styled.View`
-    position: absolute;
-    right: ${wp('2%')};
-    top: ${hp('50.5%')};
-    width: ${wp('10%')};
-`;
-
 const ProjectTasksText = styled.Text`
     color: #ffffff;
     font-size: ${hp('3%')};
-    padding: ${hp('1%')}px;
+    padding: ${hp('2%')}px;
+`;
+
+const SettingsButtonContainer = styled.View`
+    position: absolute;
+    right: ${wp('2%')};
+    top: ${hp('54%')};
+    width: ${wp('10%')};
 `;
 
 export default Panel;
