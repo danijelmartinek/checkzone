@@ -11,6 +11,7 @@ import {
     faProjectDiagram,
     faChartBar,
     faTasks,
+    faCog
 } from '@fortawesome/free-solid-svg-icons';
 
 import NavButton from '_atoms/_panel/navButton';
@@ -37,6 +38,11 @@ class Navigation extends React.Component {
                 view: 'Tasks',
                 text: 'Statistics',
                 icon: faChartBar
+            },
+            {
+                view: 'Tasks',
+                text: 'Settings',
+                icon: faCog
             },
         ]
     }

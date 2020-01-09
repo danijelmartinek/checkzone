@@ -12,10 +12,9 @@ import {
 
 import SlidingUpPanel from 'rn-sliding-up-panel';
 
-import ProjectTitle from '_atoms/_panel/projectTitle/index.js';
-import SettingsButton from '_atoms/_panel/settingsButton/index.js';
 import HorizontalLine from '_atoms/horizontalLine/index.js';
 import Navigation from '_molecules/_panel/navigation/index.js';
+import ProjectSelect from '_molecules/_panel/projectSelect/index.js';
 import CurrentLogInfo from '_molecules/_panel/currentLogInfo/index.js';
 import ProjectLogInfo from '_molecules/_panel/projectLogInfo/index.js';
 import ProjectTodo from '_molecules/_panel/projectTodo/index.js';
@@ -42,7 +41,7 @@ class Panel extends React.Component {
             this._panel.hide();
         }
     };
-
+    
     render() {
         const { top, bottom } = this.props.draggableRange;
 
@@ -74,7 +73,7 @@ class Panel extends React.Component {
 
                         <HorizontalLine/>
 
-                        <ProjectTitle></ProjectTitle>
+                        <ProjectSelect></ProjectSelect>
 
                         <CurrentLogInfo></CurrentLogInfo>
 
@@ -82,10 +81,6 @@ class Panel extends React.Component {
                         
                         <ProjectTasksText>Tasks</ProjectTasksText>
                         <ProjectTodo></ProjectTodo>
-
-                        <SettingsButtonContainer>
-                            <SettingsButton navigation={this.props.navigation}></SettingsButton>
-                        </SettingsButtonContainer>
                     </PanelWrapper>
                 </SlidingUpPanel>
             </PanelContainer>
@@ -102,7 +97,6 @@ const PanelContainer = styled.View`
 const PanelWrapper = styled.View`
     flex: 1;
     position: relative;
-    background-color: #ffffff;
     background-color: #101424;
     border-top-left-radius: ${wp('5%')};
     border-top-right-radius: ${wp('5%')};
@@ -125,13 +119,6 @@ const ProjectTasksText = styled.Text`
     color: #ffffff;
     font-size: ${hp('3%')};
     padding: ${hp('2%')}px;
-`;
-
-const SettingsButtonContainer = styled.View`
-    position: absolute;
-    right: ${wp('2%')};
-    top: ${hp('54%')};
-    width: ${wp('10%')};
 `;
 
 export default Panel;

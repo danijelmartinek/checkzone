@@ -6,15 +6,7 @@ import Constants from 'expo-constants';
 
 import Main from '_views/main/index.js';
 
-class Logs extends React.Component {
-    render() {
-        return (
-            <View style={styles.container}>
-                <Text style={{ color: '#ffffff' }}>Logss page</Text>
-            </View>
-        );
-    }
-}
+import Logs from '_views/logs/index.js';
 
 class Tasks extends React.Component {
     render() {

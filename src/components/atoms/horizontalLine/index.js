@@ -8,7 +8,7 @@ class HorizontalLine extends React.Component {
 }
 
 const Line = styled.View`
-    border: 2px solid #ffffff;
+    border: 1px solid #ffffff;
     margin: 0px 20px 0px 20px;
     opacity: 0.1;
 `;
