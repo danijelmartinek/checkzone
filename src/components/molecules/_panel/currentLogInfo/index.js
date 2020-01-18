@@ -19,8 +19,8 @@ class CurrentLogInfo extends React.Component {
                         textUppercase={true}
                     ></TextInfo>
                     <TextInfo 
-                        description={'end time:'} 
-                        text={'20:30'}
+                        description={'pause time:'} 
+                        text={'00:30'}
                         descSize={12}
                         textSize={16}
                         descUppercase={true}

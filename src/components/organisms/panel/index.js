@@ -16,7 +16,7 @@ import HorizontalLine from '_atoms/horizontalLine/index.js';
 import Navigation from '_molecules/_panel/navigation/index.js';
 import ProjectSelect from '_molecules/_panel/projectSelect/index.js';
 import CurrentLogInfo from '_molecules/_panel/currentLogInfo/index.js';
-import ProjectLogInfo from '_molecules/_panel/projectLogInfo/index.js';
+// import ProjectLogInfo from '_molecules/_panel/projectLogInfo/index.js';
 import ProjectTodo from '_molecules/_panel/projectTodo/index.js';
 
 class Panel extends React.Component {
@@ -52,7 +52,6 @@ class Panel extends React.Component {
                     draggableRange={{ top: top - hp('7.5%'), bottom: bottom }}
                     animatedValue={this._draggedValue}
                     snappingPoints={[hp('20%')]}
-                    height={hp('100%')}
                     friction={1}
                     showBackdrop={false}
                 >
@@ -77,7 +76,7 @@ class Panel extends React.Component {
 
                         <CurrentLogInfo></CurrentLogInfo>
 
-                        <ProjectLogInfo></ProjectLogInfo>
+                        {/* <ProjectLogInfo></ProjectLogInfo> */}
                         
                         <ProjectTasksText>Tasks</ProjectTasksText>
                         <ProjectTodo></ProjectTodo>
@@ -103,13 +102,15 @@ const PanelWrapper = styled.View`
 `;
 
 const HookContainer = styled.View`
-    height: ${hp('7.5%')};
+    height: ${hp('8%')};
     width: ${wp('100%')};
+    display: flex;
+    justify-content: center;
 `;
 
 const Hook = styled.View`
     height: ${hp('1%')};
-    margin: ${hp('3.5%')}px ${hp('5%')}px 0px ${hp('5%')}px;
+    margin: 0px ${hp('22%')}px 0px ${hp('22%')}px;
     border-radius: ${hp('5%')};
     background-color: #ffffff;
     opacity: 0.2;

@@ -46,7 +46,7 @@ class Log extends React.Component {
         return (
             <LogWrapper
                 activeOpacity={0.5}
-                onPress={() => true}
+                onPress={() => this.props.navigation.navigate('LogDetails', {logId: this.props.record.id})}
             >
                 <LogTitle>
                     <ProjectTitle 
@@ -90,7 +90,7 @@ class Log extends React.Component {
 
 const LogWrapper = styled.TouchableOpacity`
     width: ${wp('100%')};
-    margin: ${hp('0.5%')}px 0px ${hp('0.5%')}px 0px;
+    padding: ${hp('0.5%')}px ${wp('2%')}px ${hp('0.5%')}px ${wp('4%')}px;
     display: flex;
     flex-direction: row;
 `;

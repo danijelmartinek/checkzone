@@ -69,8 +69,7 @@ const NavContainer = styled.View`
     display: flex;
     flex-direction: row;
     justify-content: center;
-    padding-top: ${hp('2%')}px;
-    margin-bottom: ${hp('6%')}px;
+    padding-top: ${hp('2.5%')}px;
 `;
 
 const NavWrapper = styled.View`

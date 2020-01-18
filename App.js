@@ -1,5 +1,21 @@
-import { createAppContainer } from 'react-navigation';
+import * as React from 'react';
+
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
+import Reducer from '_redux/store.js';
 
 import Navigations from '_navigations/index.js';
 
-export default createAppContainer(Navigations);
+const store = createStore(Reducer);
+
+class App extends React.Component {
+    render() {
+        return (
+            <Provider store={store}>
+                <Navigations></Navigations>
+            </Provider>
+        );
+    }
+}
+
+export default App;

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { StatusBar } from 'react-native';
-import Constants from 'expo-constants';
 
 import Counter from '_molecules/counter/index.js';
 import Panel from '_organisms/panel/index.js';
@@ -21,7 +20,6 @@ class Main extends React.Component {
 const MainContainer = styled.View`
     flex: 1;
     justify-content: center;
-    padding-top: ${Constants.statusBarHeight};
     background-color: #000914;
     padding: 8px;
 `;

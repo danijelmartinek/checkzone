@@ -15,7 +15,8 @@ module.exports = function(api) {
 				"_navigations":"./src/navigations",
 				"_views":"./src/views",
 				"_styles":"./src/styles",
-				"_utils":"./src/utils"
+				"_utils":"./src/utils",
+				"_redux":"./src/redux",
 			}
 		}]
 	];

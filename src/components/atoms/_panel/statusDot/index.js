@@ -40,6 +40,7 @@ const StatusDotCircle = styled.View`
     margin-right: ${wp('2.5%')};
     opacity: 0.5;
     background-color: ${props => props.color || '#ff0000'}};
+    z-index: 200;
 `;
 
 const StatusDotInner = styled.View`
@@ -47,6 +48,7 @@ const StatusDotInner = styled.View`
     height: ${hp('2%')};
     border-radius: ${hp('1%')};
     background-color: ${props => props.color || '#ff0000'}};
+    z-index: 500;
 `;
 
 const StatusText = styled.Text`
@@ -54,5 +56,6 @@ const StatusText = styled.Text`
     margin-top: ${hp('0.2%')};
     font-size: ${hp('2.5%')};
     text-transform: uppercase;
+    align-self: center;
 `;
 export default StatusDot;

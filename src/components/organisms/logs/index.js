@@ -17,11 +17,11 @@ class Logs extends React.Component {
     state = {
         logs: [
             {
-                date: '2020-01-08T00:05:32.000Z',
+                date: '2020-01-13T00:05:32.000Z',
                 totalTime: 25128,
                 records: [
                     {
-                        id: 1,
+                        id: 8,
                         project: {
                             title: 'Project 11',
                             color: '#ff0000'
@@ -35,7 +35,7 @@ class Logs extends React.Component {
                         }
                     },
                     {
-                        id: 1,
+                        id: 5,
                         project: {
                             title: 'Project 22',
                             color: '#ffff00'
@@ -69,7 +69,7 @@ class Logs extends React.Component {
                         }
                     },
                     {
-                        id: 1,
+                        id: 2,
                         project: {
                             title: 'Project 123',
                             color: '#ffffff'
@@ -118,7 +118,7 @@ class Logs extends React.Component {
                         </LogsDay>
                         {log.records.map((record, j) => (
                             <React.Fragment key={j}>
-                                <Log record={record}></Log>
+                                <Log record={record} navigation={this.props.navigation}></Log>
                                 <HorizontalLine></HorizontalLine>
                             </React.Fragment>
                         ))}
@@ -144,7 +144,7 @@ const LogsDayText = styled.Text`
     font-size: ${hp('3%')};
     color: #ffffff;
     font-weight: bold;
-    padding: ${hp('2%')}px 0px 0px ${hp('2.5%')}px;
+    padding: ${hp('2%')}px 0px 0px ${hp('2%')}px;
 `;
 
 const LogsTotalTime = styled.Text`
@@ -153,6 +153,6 @@ const LogsTotalTime = styled.Text`
     color: #ffffff;
     text-align: right;
     align-self: flex-end;
-    padding-right: ${hp('2.5%')}px;
+    padding-right: ${wp('6.5%')}px;
 `;
 export default Logs;

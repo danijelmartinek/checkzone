@@ -20,20 +20,24 @@ class ProjectTitle extends React.Component {
 }
 
 const ProjectTitleContainer = styled.View`
+    height: ${hp('5%')};
     display: flex;
+    flex-direction: column;
     align-items: ${props => props.align || 'center'}};
-    text-align: center;
+    justify-content: center;
 `;
 
 const ProjectTitleWrapper = styled.View`
+    display: flex;
     flex-direction: row;
-    margin: ${props => hp('1%') * props.scale || hp('1%')}px;
+    text-align: center;
 `;
 
 const ProjectColor = styled.View`
+    align-self: center;
     width: ${props => hp('2%') * props.scale || hp('2%')};
     height: ${props => hp('2%') * props.scale || hp('2%')};
-    margin-top: ${props => hp('0.8%') * props.scale || hp('0.8%')}px;
+    margin-top: ${props => hp('0.2%') * props.scale || hp('0.2%')}px;
     border-radius: ${props => hp('0.5%') * props.scale || hp('0.5%')};
     background-color: ${props => props.color || '#ffffff'}}
 `;
@@ -41,7 +45,8 @@ const ProjectColor = styled.View`
 const ProjectTitleText = styled.Text`
     font-size: ${props => hp('2.5%') * props.scale || hp('2.5%')};
     color: ${props => props.textColor || '#ffffff'}};
-    margin-left: ${props => hp('1%') * props.scale || hp('1%')};
+    margin-left: ${props => hp('1.2%') * props.scale || hp('1.2%')};
+    margin-right: ${props => hp('1.2%') * props.scale || hp('1.2%')};
 `;
 
 export default ProjectTitle;

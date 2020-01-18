@@ -18,8 +18,8 @@ class LogInfoItem extends React.Component {
                     style={
                         {
                             color: '#ffffff', 
-                            marginTop: hp('0.5%'),
-                            opacity: this.props.opacity
+                            opacity: this.props.opacity,
+                            alignSelf: 'center'
                         }
                     }
                 />

@@ -1,12 +1,16 @@
 import * as React from 'react';
 
 import { createStackNavigator } from 'react-navigation-stack';
-import { View, Text, StyleSheet } from 'react-native';
+import { createAppContainer } from 'react-navigation';
+
+import { fromRight } from 'react-navigation-transitions';
+import { View, Text, StyleSheet, Button } from 'react-native';
 import Constants from 'expo-constants';
 
 import Main from '_views/main/index.js';
 
 import Logs from '_views/logs/index.js';
+import LogDetails from '_views/logDetails/index.js';
 
 class Tasks extends React.Component {
     render() {
@@ -17,6 +21,8 @@ class Tasks extends React.Component {
         );
     }
 }
+
+
 
 
 
@@ -50,6 +56,15 @@ const MainNavigator = createStackNavigator(
                 headerTitleStyle: {
                     fontWeight: 'bold',
                 },
+                headerShown: false
+            },
+        },
+
+        LogDetails: {
+            screen: LogDetails,
+            navigationOptions: {
+                title: 'LogDetails',
+                headerShown: false
             },
         },
 
@@ -75,12 +90,16 @@ const MainNavigator = createStackNavigator(
         cardStyle: {
             backgroundColor: 'transparent',
         },
-        transitionConfig: () => ({
-            containerStyle: {
-                backgroundColor: 'transparent',
-            },
-        }),
+        transitionConfig: (currentState) => {
+            const currentView = currentState.scenes[
+                currentState.scenes.length - 1
+            ].route.routeName
+
+            if(currentView === 'LogDetails') {
+                return fromRight();
+            }
+        },
     }
 );
 
-export default MainNavigator;
+export default createAppContainer(MainNavigator);

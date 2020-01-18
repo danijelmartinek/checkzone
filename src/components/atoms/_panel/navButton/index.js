@@ -24,32 +24,35 @@ class NavButton extends React.Component {
                 <NavItem>
                     <FontAwesomeIcon
                         icon={this.props.item.icon}
-                        size={32}
+                        size={Number(hp('5%'))}
                         style={{color: '#ffffff'}}
                     />
                 </NavItem>
-                <NavItemElementText>{this.props.item.text}</NavItemElementText>
+                <NavItem>
+                    <NavItemElementText>{this.props.item.text}</NavItemElementText>
+                </NavItem>
             </NavItemOpacity>
         );
     }
 }
 
-const NavItem = styled.View`
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-    margin ${hp('1%')};
-    padding-top: ${hp('4.2%')};
+const NavItemOpacity = styled.TouchableOpacity`
+    height: ${hp('11%')};
+    opacity: 0.5;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    align-items: center
 `;
 
-const NavItemOpacity = styled.TouchableOpacity`
-    opacity: 0.4;
+const NavItem = styled.View`
+    flex: 1;
 `;
 
 const NavItemElementText = styled.Text`
     color: #ffffff;
     text-align: center;
-    padding-top: ${hp('2%')};
+    font-size: ${hp('2%')};
 `;
 
 export default NavButton;
