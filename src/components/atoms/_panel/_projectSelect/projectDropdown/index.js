@@ -46,7 +46,12 @@ class ProjectDropdown extends React.Component {
                 <ProjectDropdownWrapper {...this._panResponder.panHandlers} overScrollMode={'never'}>
                     {this.props.projects.map((project, i) => (
                         <ProjectOption key={i} activeOpacity={0.5} onPress={() => this.onProjectSelect(i, project)}>
-                            <ProjectTitle color={project.color} title={project.title} scale={0.9}></ProjectTitle>
+                            <ProjectTitle 
+                                color={project.color} 
+                                title={project.title} 
+                                colorScale={1}
+                                fontSize={'gama'}
+                            ></ProjectTitle>
                         </ProjectOption>
                     ))}
                 </ProjectDropdownWrapper>

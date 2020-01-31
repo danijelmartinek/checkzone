@@ -6,43 +6,36 @@ import {
     heightPercentageToDP as hp,
 } from '_utils/dimensions.js';
 
-import {
-    faClock,
-    faProjectDiagram,
-    faChartBar,
-    faTasks,
-    faCog
-} from '@fortawesome/free-solid-svg-icons';
-
 import NavButton from '_atoms/_panel/navButton';
 
 class Navigation extends React.Component {
+
     state = {
         navItems: [
             {
                 view: 'Logs',
                 text: 'Logs',
-                icon: faClock
+                icon: 'clock'
             },
             {
                 view: 'Tasks',
                 text: 'Projects',
-                icon: faProjectDiagram
+                icon: 'project-diagram'
             },
             {
                 view: 'Tasks',
                 text: 'Tasks',
-                icon: faTasks
+                icon: 'tasks'
             },
             {
                 view: 'Tasks',
                 text: 'Statistics',
-                icon: faChartBar
+                icon: 'chart-bar'
             },
             {
                 view: 'Tasks',
                 text: 'Settings',
-                icon: faCog
+                icon: 'cog'
             },
         ]
     }

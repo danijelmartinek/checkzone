@@ -1,13 +1,10 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import {
     Animated
 } from 'react-native';
 
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import {
-    faCaretDown
-} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 import ProjectTitle from '_atoms/projectTitle/index.js';
 
@@ -50,19 +47,22 @@ class SelectedProject extends React.Component {
         });
 
         return (
-            <SelectedProjectWrapper onPress={() => this.toggleProjectSelect()} activeOpacity={this.props.disabled ? 1 : 0.5}>
-                <ProjectTitle color={this.props.color} title={this.props.title}></ProjectTitle>
+            <SelectedProjectWrapper onPress={() => this.toggleProjectSelect()} activeOpacity={this.props.disabled ? 1 : this.props.theme.options.activeOpacity}>
+                <ProjectTitle 
+                    color={this.props.color} 
+                    title={this.props.title}
+                    colorScale={1}
+                    fontSize={'beta'}
+                ></ProjectTitle>
 
                 <Animated.View style={{ transform: [{rotate: interpolatedRotateAnimation}] }}>
-                    <FontAwesomeIcon
-                        icon={faCaretDown}
+                    <FontAwesome5
+                        name={'caret-down'}
                         size={18}
-                        style={
-                            {
-                                color: '#ffffff', 
-                                opacity: this.props.disabled ? 0 : 1
-                            }
-                        }
+                        style={{
+                            color: this.props.theme.colors.textPrimary,
+                            opacity: this.props.disabled ? 0 : 1
+                        }}
                     />
                 </Animated.View>
             </SelectedProjectWrapper>
@@ -77,4 +77,4 @@ const SelectedProjectWrapper = styled.TouchableOpacity`
     alignItems: center;
 `;
 
-export default SelectedProject;
+export default withTheme(SelectedProject);

@@ -11,15 +11,15 @@ class ProjectLogInfo extends React.Component {
                     <TextInfo 
                         description={'Total time:'} 
                         text={'18:30'}
-                        descSize={16}
-                        textSize={20}
+                        descSize={'epsilon'}
+                        textSize={'gama'}
                         textUppercase={true}
                     ></TextInfo>
                     <TextInfo 
                         description={'Total pause:'} 
                         text={'18:30'}
-                        descSize={16}
-                        textSize={20}
+                        descSize={'epsilon'}
+                        textSize={'gama'}
                         textUppercase={true}
                     ></TextInfo>
                 </LogInfoItemContainer>

@@ -10,6 +10,7 @@ import Constants from 'expo-constants';
 import Main from '_views/main/index.js';
 
 import Logs from '_views/logs/index.js';
+import LogSave from '_views/logSave/index.js';
 import LogDetails from '_views/logDetails/index.js';
 
 class Tasks extends React.Component {
@@ -21,9 +22,6 @@ class Tasks extends React.Component {
         );
     }
 }
-
-
-
 
 
 const styles = StyleSheet.create({
@@ -56,6 +54,14 @@ const MainNavigator = createStackNavigator(
                 headerTitleStyle: {
                     fontWeight: 'bold',
                 },
+                headerShown: false
+            },
+        },
+
+        LogSave: {
+            screen: LogSave,
+            navigationOptions: {
+                title: 'LogSave',
                 headerShown: false
             },
         },

@@ -1,6 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { connect } from 'react-redux'
+
+import { dateToHnM, secToString } from '_utils/time.js';
+
 import StatusDot from '_atoms/_panel/statusDot/index.js';
 import TextInfo from '_atoms/_panel/textInfo/index.js';
 
@@ -9,20 +13,20 @@ class CurrentLogInfo extends React.Component {
         return (
             <LogInfoContainer>
                 <CurrentStats>
-                    <StatusDot color={'#39ff14'} text={'on'}></StatusDot>
+                    <StatusDot color={(this.props.LOG_INFO.active? '#39ff14': '#f70d1a')} text={(this.props.LOG_INFO.active? 'on': 'off')}></StatusDot>
                     <TextInfo 
                         description={'start time:'} 
-                        text={'18:30'}
-                        descSize={12}
-                        textSize={16}
+                        text={dateToHnM(this.props.LOG_INFO.startTime)}
+                        descSize={'delta'}
+                        textSize={'beta'}
                         descUppercase={true}
                         textUppercase={true}
                     ></TextInfo>
                     <TextInfo 
                         description={'pause time:'} 
-                        text={'00:30'}
-                        descSize={12}
-                        textSize={16}
+                        text={secToString(this.props.LOG_INFO.pauseTime)}
+                        descSize={'delta'}
+                        textSize={'beta'}
                         descUppercase={true}
                         textUppercase={true}
                     ></TextInfo>
@@ -44,4 +48,10 @@ const CurrentStats = styled.View`
     flex-wrap: wrap;
 `;
 
-export default CurrentLogInfo;
+const mapStateToProps = (state) => {
+    return{
+        LOG_INFO: state.LOG_INFO
+    };
+}
+
+export default connect(mapStateToProps)(CurrentLogInfo);

@@ -10,7 +10,7 @@ class Main extends React.Component {
         return (
             <MainContainer>
                 <StatusBar barStyle="light-content" />
-                <Counter></Counter>
+                <Counter navigation={this.props.navigation}></Counter>
                 <Panel navigation={this.props.navigation}></Panel>
             </MainContainer>
         );

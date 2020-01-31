@@ -1,11 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
 
-import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp,
-} from '_utils/dimensions.js';
-
+import { connect } from 'react-redux'
 
 import SelectedProject from '_atoms/_panel/_projectSelect/selectedProject/index.js'
 import ProjectDropdown from '_atoms/_panel/_projectSelect/projectDropdown/index.js'
@@ -64,7 +59,7 @@ class ProjectSelect extends React.Component {
                     color={this.state.selectedProject.color}
                     title={this.state.selectedProject.title}
                     onToggle={() => this.projectDropdownToggle()}
-                    disabled={false}
+                    disabled={this.props.LOG_INFO.active}
                 ></SelectedProject>
 
                 <ProjectDropdown 
@@ -77,4 +72,10 @@ class ProjectSelect extends React.Component {
     }
 }
 
-export default ProjectSelect;
+const mapStateToProps = (state) => {
+    return{
+        LOG_INFO: state.LOG_INFO
+    };
+}
+
+export default connect(mapStateToProps)(ProjectSelect);

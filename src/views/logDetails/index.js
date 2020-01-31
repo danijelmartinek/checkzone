@@ -1,9 +1,10 @@
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import Constants from 'expo-constants';
 
 import { connect } from 'react-redux'
 import { setTheme } from '_redux/actions.js';
+import Theme from '_styles/themeComponent/index.js';
 
 
 import {
@@ -20,23 +21,30 @@ class LogDetails extends React.Component {
     componentWillMount() {
         this.props.setTheme('light')
     }
+
+    toggleTheme = () => {
+        this.props.setTheme('dark')
+    }
   
     render() {
         return (
-            <LogDetailsContainer>
-                <CloseTopBar navigation={this.props.navigation}></CloseTopBar>
-                {/* <Text style={{ color: '#ffffff', ...this.props.font.size.giga}}>Lorem IPSUM</Text>
-                <Text style={{ color: '#ffffff', ...this.props.font.size.mega}}>Lorem IPSUM</Text>
-                <Text style={{ color: '#ffffff', ...this.props.font.size.kilo}}>Lorem IPSUM</Text>
-                <Text style={{ color: '#ffffff', ...this.props.font.size.alpha}}>Lorem IPSUM</Text>
-                <Text style={{ color: '#ffffff', ...this.props.font.size.beta}}>Lorem IPSUM</Text>
-                <Text style={{ color: '#ffffff', ...this.props.font.size.gama}}>Lorem IPSUM</Text>
-                <Text style={{ color: '#ffffff', ...this.props.font.size.delta}}>Lorem IPSUM</Text>
-                <Text style={{ color: '#ffffff', ...this.props.font.size.epsilon}}>Lorem IPSUM</Text>
-                <Text style={{ color: '#ffffff', ...this.props.font.size.zeta}}>Lorem IPSUM</Text>
-                <Text style={{ color: '#ffffff', ...this.props.font.size.mili}}>Lorem IPSUM</Text> */}
-                <Text style={{ color: '#ffffff'}}>{JSON.stringify(this.props.DEFAULT_THEME)}</Text>
-            </LogDetailsContainer>
+            <Theme>
+                <LogDetailsContainer>
+                    <CloseTopBar navigation={this.props.navigation}></CloseTopBar>
+                    {/* <Text style={{ color: '#ffffff', ...this.props.font.size.giga}}>Lorem IPSUM</Text>
+                    <Text style={{ color: '#ffffff', ...this.props.font.size.mega}}>Lorem IPSUM</Text>
+                    <Text style={{ color: '#ffffff', ...this.props.font.size.kilo}}>Lorem IPSUM</Text>
+                    <Text style={{ color: '#ffffff', ...this.props.font.size.alpha}}>Lorem IPSUM</Text>
+                    <Text style={{ color: '#ffffff', ...this.props.font.size.beta}}>Lorem IPSUM</Text>
+                    <Text style={{ color: '#ffffff', ...this.props.font.size.gama}}>Lorem IPSUM</Text>
+                    <Text style={{ color: '#ffffff', ...this.props.font.size.delta}}>Lorem IPSUM</Text>
+                    <Text style={{ color: '#ffffff', ...this.props.font.size.epsilon}}>Lorem IPSUM</Text>
+                    <Text style={{ color: '#ffffff', ...this.props.font.size.zeta}}>Lorem IPSUM</Text>
+                    <Text style={{ color: '#ffffff', ...this.props.font.size.mili}}>Lorem IPSUM</Text> */}
+                    {/* <Text style={{ color: '#ffffff'}}>{JSON.stringify(this.props.DEFAULT_THEME)}</Text> */}
+                    <Btn onPress={this.toggleTheme}><BtnText>{'toggle'}</BtnText></Btn>
+                </LogDetailsContainer>
+            </Theme>
         );
     }
 }
@@ -44,22 +52,22 @@ class LogDetails extends React.Component {
 const LogDetailsContainer = styled.View`
     flex: 1;
     margin-top: ${Constants.statusBarHeight};
-    background-color: #000914;
+    background-color: ${props => props.theme.colors.accent || 'blue'}};
 `;
 
+const Btn = styled.TouchableOpacity`
+    background-color: ${props => props.theme.colors.primary || 'blue'}};
+`;
 
-
-const mapStateToProps = (state) => {
-    return{
-        DEFAULT_THEME : state.DEFAULT_THEME,
-        THEME_OPTIONS: state.THEME_OPTIONS
-    };
-}
+const BtnText = styled.Text`
+    color: ${props => props.theme.colors.accent || 'blue'}};
+`;
 
 const mapDispatchToProps = dispatch => {
     return {
       setTheme: (mode) => dispatch(setTheme(mode)),
     }
-  }
+}
 
-export default connect(mapStateToProps, mapDispatchToProps)(LogDetails);
+
+export default connect(null, mapDispatchToProps)(LogDetails);

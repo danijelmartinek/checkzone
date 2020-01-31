@@ -1,8 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import {
     Animated,
-    TouchableOpacity,
 } from 'react-native';
 
 import {
@@ -56,14 +55,14 @@ class Panel extends React.Component {
                     showBackdrop={false}
                 >
                     <PanelWrapper>
-                        <TouchableOpacity
+                        <HookContainer
                             onPress={this.togglePanel}
-                            activeOpacity={0.8}
+                            activeOpacity={this.props.theme.options.activeOpacity}
                         >
-                            <HookContainer>
+                            <HookWrapper>
                                 <Hook></Hook>
-                            </HookContainer>
-                        </TouchableOpacity>
+                            </HookWrapper>
+                        </HookContainer>
 
                         <Navigation
                             navigation={this.props.navigation}
@@ -96,12 +95,16 @@ const PanelContainer = styled.View`
 const PanelWrapper = styled.View`
     flex: 1;
     position: relative;
-    background-color: #101424;
+    background-color: ${props => props.theme.colors.primary || '#ffffff'}};
     border-top-left-radius: ${wp('5%')};
     border-top-right-radius: ${wp('5%')};
 `;
 
-const HookContainer = styled.View`
+const HookContainer = styled.TouchableOpacity`
+    opacity: ${props => props.theme.options.initialOpacity || 1};
+`;
+
+const HookWrapper = styled.View`
     height: ${hp('8%')};
     width: ${wp('100%')};
     display: flex;
@@ -110,16 +113,17 @@ const HookContainer = styled.View`
 
 const Hook = styled.View`
     height: ${hp('1%')};
-    margin: 0px ${hp('22%')}px 0px ${hp('22%')}px;
+    margin: 0px ${hp('24%')}px 0px ${hp('24%')}px;
     border-radius: ${hp('5%')};
-    background-color: #ffffff;
-    opacity: 0.2;
+    background-color: ${props => props.theme.colors.textPrimary || '#ffffff'}};
 `;
 
 const ProjectTasksText = styled.Text`
-    color: #ffffff;
-    font-size: ${hp('3%')};
+    color: ${props => props.theme.colors.textPrimary || '#000000'}};
     padding: ${hp('2%')}px;
+
+    ${props => props.theme.fonts.size.beta}
+    text-transform: uppercase;
 `;
 
-export default Panel;
+export default withTheme(Panel);

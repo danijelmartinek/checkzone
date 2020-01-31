@@ -52,10 +52,11 @@ const StatusDotInner = styled.View`
 `;
 
 const StatusText = styled.Text`
-    color: #ffffff;
+    color: ${props => props.theme.colors.textPrimary || '#ffffff'}};
     margin-top: ${hp('0.2%')};
-    font-size: ${hp('2.5%')};
-    text-transform: uppercase;
     align-self: center;
+
+    ${props => props.theme.fonts.size.gama}
+    text-transform: uppercase;
 `;
 export default StatusDot;

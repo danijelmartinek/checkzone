@@ -1,12 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from '_utils/dimensions.js';
 
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 class NavButton extends React.Component {
     
@@ -18,15 +18,14 @@ class NavButton extends React.Component {
     render() {
         return (
             <NavItemOpacity
-                activeOpacity={1}
+                activeOpacity={this.props.theme.options.activeOpacity}
                 onPress={() => this.onNavClick(this.props.item.view)}
             >
                 <NavItem>
-                    <FontAwesomeIcon
-                        icon={this.props.item.icon}
-                        size={Number(hp('5%'))}
-                        style={{color: '#ffffff'}}
-                    />
+                    <NavItemElementIcon 
+                        name={this.props.item.icon}
+                        size={Number(hp('3.5%'))}
+                    ></NavItemElementIcon>
                 </NavItem>
                 <NavItem>
                     <NavItemElementText>{this.props.item.text}</NavItemElementText>
@@ -37,22 +36,27 @@ class NavButton extends React.Component {
 }
 
 const NavItemOpacity = styled.TouchableOpacity`
-    height: ${hp('11%')};
-    opacity: 0.5;
+    height: ${hp('8%')};
     display: flex;
     flex-direction: column;
     align-content: center;
-    align-items: center
+    align-items: center;
+    margin-bottom: ${hp('3%')};
+    opacity: ${props => props.theme.options.initialOpacity || 1};
 `;
 
 const NavItem = styled.View`
     flex: 1;
 `;
 
+const NavItemElementIcon = styled(FontAwesome5)`
+    color: ${props => props.theme.colors.textPrimary || '#ffffff'}};
+`;
+
 const NavItemElementText = styled.Text`
-    color: #ffffff;
+    color: ${props => props.theme.colors.textPrimary || '#ffffff'}};
     text-align: center;
     font-size: ${hp('2%')};
 `;
 
-export default NavButton;
+export default withTheme(NavButton);

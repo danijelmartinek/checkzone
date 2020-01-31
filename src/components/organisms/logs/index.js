@@ -6,8 +6,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from '_utils/dimensions.js';
-
-import moment from 'moment';
+import { secToString, humanFormat } from '_utils/time.js';
 
 import HorizontalLine from '_atoms/horizontalLine/index.js';
 import Log from '_molecules/log/index.js';
@@ -87,25 +86,7 @@ class Logs extends React.Component {
         ]
     }
 
-    secToString = (sec) => {
-        return moment.utc(moment.duration(sec, "seconds").asMilliseconds()).format("HH:mm")
-    }
-
-    humanFormat = (dateString) => {
-        const dateNow = new Date();
-
-        if(moment(dateNow).format("YYYY") === moment(dateString).format("YYYY")) {
-            if(moment(dateNow).format("MMMM D") === moment(dateString).format("MMMM D")) {
-                return "Today";
-            } else if(moment(dateNow).subtract(1, 'days').format("MMMM D") === moment(dateString).format("MMMM D")){
-                return "Yesterday";
-            } else {
-                return moment(dateString).format("MMMM D")
-            }
-        } else {
-            return moment(dateString).format("MMMM D, YYYY")
-        }
-    }
+    
 
     render() {
         return (
@@ -113,8 +94,8 @@ class Logs extends React.Component {
                 {this.state.logs.map((log, i) => (
                     <LogsGroup key={i}>
                         <LogsDay>
-                            <LogsDayText>{this.humanFormat(log.date)}</LogsDayText>
-                            <LogsTotalTime>Σ {this.secToString(log.totalTime)}</LogsTotalTime>
+                            <LogsDayText>{humanFormat(log.date)}</LogsDayText>
+                            <LogsTotalTime>Σ {secToString(log.totalTime)}</LogsTotalTime>
                         </LogsDay>
                         {log.records.map((record, j) => (
                             <React.Fragment key={j}>
@@ -142,7 +123,7 @@ const LogsDay = styled.View`
 const LogsDayText = styled.Text`
     flex: 1;
     font-size: ${hp('3%')};
-    color: #ffffff;
+    color: ${props => props.theme.colors.textPrimary || '#ffffff'}};
     font-weight: bold;
     padding: ${hp('2%')}px 0px 0px ${hp('2%')}px;
 `;
@@ -150,7 +131,7 @@ const LogsDayText = styled.Text`
 const LogsTotalTime = styled.Text`
     flex: 1;
     font-size: ${hp('2%')};
-    color: #ffffff;
+    color: ${props => props.theme.colors.textPrimary || '#ffffff'}};
     text-align: right;
     align-self: flex-end;
     padding-right: ${wp('6.5%')}px;

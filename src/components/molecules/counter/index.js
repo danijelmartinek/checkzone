@@ -2,6 +2,9 @@ import * as React from 'react';
 import * as Font from 'expo-font';
 import {View} from 'react-native';
 
+import { connect } from 'react-redux'
+import { startCounter, resumeCounter, updateCounter } from '_redux/actions.js';
+
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -37,11 +40,32 @@ class Counter extends React.Component {
             this.setState(prevState => ({
                 mainButton: 'Stop'
             }));
+            
+            if(this.props.LOG_INFO.countTime === 0){
+                this.props.startCounter();
+            } else {
+                this.props.resumeCounter();
+            }
         } else {
             this.setState(prevState => ({
                 mainButton: 'Start'
             }));
+
+            this.props.navigation.navigate('LogSave');
+
+            this.props.updateCounter({
+                active: false,
+                startTime: this.props.LOG_INFO.startTime,
+                countTime: this.timeDisplay.current.totalSeconds,
+                endTime: new Date(),
+                totalSessionTime: this.timeDisplay.current.totalSeconds,
+                pauseTime: 0,
+                pauseEntities: [],
+                tasks: this.props.LOG_INFO.tasks,
+                commits: this.props.LOG_INFO.commits
+            });
         }
+
     }
 
     togglePause = () => {
@@ -72,4 +96,17 @@ class Counter extends React.Component {
     }
 }
 
-export default Counter;
+const mapStateToProps = (state) => {
+    return{
+        LOG_INFO: state.LOG_INFO
+    };
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        startCounter: () => dispatch(startCounter()),
+        resumeCounter: () => dispatch(resumeCounter()),
+        updateCounter: (obj) => dispatch(updateCounter(obj)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Counter);

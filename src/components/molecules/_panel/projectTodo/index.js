@@ -1,6 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import { PanResponder } from 'react-native';
+
+import { connect } from 'react-redux'
+import { toggleTodo } from '_redux/actions.js';
 
 import {
     widthPercentageToDP as wp,
@@ -18,25 +21,18 @@ class ProjectTodo extends React.Component {
     _onRelease() {
         this.setState({ dragPanel: true });
     }
+
+    componentWillMount() {
+        this.setState({
+            tasks: this.state.tasks.filter(task => task.checked === false)
+        })
+    }
     
     constructor(props) {
         super(props);
 
         this.state = {
-            tasks: [
-                {
-                    checked: false,
-                    todo: 'Primjer za todo'
-                },
-                {
-                    checked: true,
-                    todo: 'Ovo je neki dugi todo primjer da vidim kak se text prelijeva u todo listi'
-                },
-                {
-                    checked: false,
-                    todo: 'Nekaj treće'
-                }
-            ]
+            tasks: this.props.PROJECT_INFO.tasks
         }
 
         this._onGrant = this._onGrant.bind(this);
@@ -50,25 +46,36 @@ class ProjectTodo extends React.Component {
     }
 
     toggleTask = (index) => {
+        let that = this;
         this.setState({
             tasks: this.state.tasks.map((_task, ind) => {
                 if(ind == index) {
-                    _task.checked = !_task.checked;
+                    that.props.toggleTodo(_task.id, _task.checked)
                 }
 
                 return _task;
             })
         })
+
+
     }
 
     render() {
         return (
-            <TasksContainer {...this._panResponder.panHandlers} overScrollMode={'never'}>
+            <TasksContainer 
+                {...this._panResponder.panHandlers} 
+                overScrollMode={'never'} 
+                active={this.props.LOG_INFO.active? '1': this.props.theme.options.textDepressedOpacity}
+            >
                 {this.state.tasks.map((task, i) => (
                     <TaskItem key={i}>
                         <TaskItemCheckBox
-                            checkBoxColor={"#ffffff"}
-                            leftTextStyle={{color: "#ffffff", textDecorationLine: `${task.checked ? 'line-through': 'none'}`}}
+                            disabled={!this.props.LOG_INFO.active}
+                            checkBoxColor={this.props.theme.colors.textPrimary}
+                            leftTextStyle={{...{
+                                color: this.props.theme.colors.textPrimary, 
+                                textDecorationLine: `${task.checked ? 'line-through': 'none'}`
+                            }, ...this.props.theme.fonts.oSize.gama}}
                             onClick={() => this.toggleTask(i)}
                             isChecked={task.checked}
                             leftText={task.todo}
@@ -82,12 +89,13 @@ class ProjectTodo extends React.Component {
 
 const TasksContainer = styled.ScrollView`
     height: 100%;
+    opacity: ${props => props.active || '1'}};
 `;
 
 const TaskItem = styled.View`
     width: ${wp('94%')};
     margin: ${wp('3%')}px;
-    background-color: #181e36;
+    background-color: ${props => props.theme.colors.secondary || '#000000'}};
 `;
 
 const TaskItemCheckBox = styled(CheckBox)`
@@ -95,4 +103,16 @@ const TaskItemCheckBox = styled(CheckBox)`
     padding: 10px;
 `;
 
-export default ProjectTodo;
+const mapStateToProps = (state) => {
+    return{
+        PROJECT_INFO: state.PROJECT_INFO,
+        LOG_INFO: state.LOG_INFO
+    };
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        toggleTodo: (id, isChecked) => dispatch(toggleTodo(id, isChecked)),
+    }
+}
+
+export default  connect(mapStateToProps, mapDispatchToProps)(withTheme(ProjectTodo));

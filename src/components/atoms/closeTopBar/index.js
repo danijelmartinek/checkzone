@@ -1,25 +1,22 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from '_utils/dimensions.js';
 
-import {
-    faTimes
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 class CloseTopBar extends React.Component {
     render() {
         return (
             <TopBar>
                 <CloseButton onPress={() => this.props.navigation.goBack()} activeOpacity={0.5}>
-                    <FontAwesomeIcon
-                        icon={faTimes}
+                    <FontAwesome5
+                        name={'times'}
                         size={20}
-                        style={{color: '#ffffff'}}
+                        style={{color: this.props.theme.colors.topBar.text}}
                     />
                 </CloseButton>
             </TopBar>
@@ -40,4 +37,4 @@ const CloseButton = styled.TouchableOpacity`
     z-index: 900;
 `;
 
-export default CloseTopBar;
+export default withTheme(CloseTopBar);

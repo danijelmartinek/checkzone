@@ -1,0 +1,255 @@
+import * as React from 'react';
+import styled, { withTheme } from 'styled-components';
+
+import { connect } from 'react-redux'
+import { startCounter, updateCounter, toggleTodo } from '_redux/actions.js';
+
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from '_utils/dimensions.js';
+import { dateToHnM, subtractTime } from '_utils/time.js';
+
+import StatusBarBg from '_atoms/statusBarBg/index.js';
+import TopBar from '_atoms/topBar/index.js';
+
+import HorizontalLine from '_atoms/horizontalLine/index.js';
+import ProjectTitle from '_atoms/projectTitle/index.js';
+import TextInfo from '_atoms/_panel/textInfo/index.js';
+
+import CheckBox from 'react-native-check-box'
+
+class LogsView extends React.Component {
+
+    componentWillMount() {
+        this.setState({
+            tasks: this.state.tasks.filter(task => {
+                if(!task.checked || this.props.LOG_INFO.tasks.includes(task.id)) {
+                    return true;
+                }
+            })
+        })
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            tasks: this.props.PROJECT_INFO.tasks
+        }
+    }
+
+    toggleTask = (index) => {
+        let that = this;
+        this.setState({
+            tasks: this.state.tasks.map((_task, ind) => {
+                if(ind == index) {
+                    that.props.toggleTodo(_task.id, _task.checked)
+                }
+
+                return _task;
+            })
+        })
+
+
+    }
+
+    render() {
+        return (
+            <LogContainer>
+                <StatusBarBg></StatusBarBg>
+                {/* <TopBar navigation={this.props.navigation} name="Log"></TopBar> */}
+
+                
+                <TitleContainer>
+                    <ProjectTitle 
+                        color={this.props.PROJECT_INFO.labelColor} 
+                        title={this.props.PROJECT_INFO.name}
+                        colorScale={1.5}
+                        fontSize={'alpha'}
+                    ></ProjectTitle>
+                </TitleContainer>
+                
+                <LogInfoContainer>
+                    <TextInfo 
+                        description={'start time'} 
+                        text={dateToHnM(this.props.LOG_INFO.startTime)}
+                        descSize={'delta'}
+                        textSize={'beta'}
+                        descUppercase={true}
+                        textUppercase={true}
+                    ></TextInfo>
+                    <TextInfo 
+                        description={'end time'} 
+                        text={dateToHnM(this.props.LOG_INFO.endTime)}
+                        descSize={'delta'}
+                        textSize={'beta'}
+                        descUppercase={true}
+                        textUppercase={true}
+                    ></TextInfo>
+                    <TextInfo 
+                        description={'duration'} 
+                        text={subtractTime(this.props.LOG_INFO.endTime, this.props.LOG_INFO.startTime)}
+                        descSize={'delta'}
+                        textSize={'beta'}
+                        descUppercase={true}
+                        textUppercase={true}
+                    ></TextInfo>
+                </LogInfoContainer>
+
+
+                <ProjectTasksText>Add Tasks</ProjectTasksText>
+                <TasksContainer overScrollMode={'never'}>
+                    {this.state.tasks.map((task, i) => (
+                        <TaskItem key={i}>
+                            <TaskItemCheckBox
+                                checkBoxColor={this.props.theme.colors.textPrimary}
+                                leftTextStyle={{...{
+                                    color: this.props.theme.colors.textPrimary, 
+                                    textDecorationLine: `${task.checked ? 'line-through': 'none'}`
+                                }, ...this.props.theme.fonts.oSize.delta}}
+                                onClick={() => this.toggleTask(i)}
+                                isChecked={task.checked}
+                                leftText={task.todo}
+                            />
+                        </TaskItem>
+                    ))}
+                </TasksContainer>
+
+                <ProjectTasksText>Connect Commits -></ProjectTasksText>
+                
+                <ActionsContainer>
+                    <HorizontalLine></HorizontalLine>
+                    <ActionsWrapper>
+                        <ActionButton 
+                            onPress={this._onPressButton}
+                            activeOpacity={this.props.theme.options.activeOpacity} 
+                            flex={1}
+                        >
+                            <ActionButtonText>
+                                Continue
+                            </ActionButtonText>
+                        </ActionButton>
+                        <ActionButton 
+                            onPress={this._onPressButton}
+                            activeOpacity={this.props.theme.options.activeOpacity} 
+                            flex={1}
+                        >
+                            <ActionButtonText color={this.props.theme.colors.semantic.error}>
+                                Cancel
+                            </ActionButtonText>
+                        </ActionButton>
+                        <ActionButton 
+                            onPress={this._onPressButton} 
+                            activeOpacity={this.props.theme.options.activeOpacity} 
+                            bgColor={this.props.theme.colors.semantic.success}
+                            flex={1}
+                        >
+                            <ActionButtonText>
+                                Save
+                            </ActionButtonText>
+                        </ActionButton>
+                    </ActionsWrapper>
+                </ActionsContainer>
+                
+            </LogContainer>
+        );
+    }
+}
+
+const LogContainer = styled.View`
+    height: 100%;
+    background-color: ${props => props.theme.colors.primary || '#ffffff'}}; 
+    display: flex;
+    padding: 0px;
+`;
+
+const ActionsContainer = styled.View`
+    position: absolute;
+    width: ${wp('100%')};
+    bottom: 0;
+`;
+
+const ActionsWrapper = styled.View`
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: ${hp('2.5%')}px;
+`;
+
+const ActionButton = styled.TouchableOpacity`
+    flex: ${props => props.flex || 1}};
+    padding: ${hp('1%')}px;
+    background-color: ${props => props.bgColor || 'transparent'}};
+    border-radius: ${hp('0.5%')}px;
+`;
+
+const ActionButtonText = styled.Text`
+    align-self: center;
+    text-transform: uppercase;
+    color: ${props => props.color || '#ffffff'}};
+    ${props => props.theme.fonts.size.gama}
+`;
+
+const TitleContainer = styled.View`
+    margin-top: ${hp('2.5%')}px;
+`;
+
+const LogInfoContainer = styled.View`
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+`;
+
+const TasksContainer = styled.ScrollView`
+    max-height: ${hp('40%')}px;
+`;
+
+const TaskItem = styled.View`
+    width: ${wp('94%')};
+    margin: ${wp('3%')}px;
+    background-color: ${props => props.theme.colors.secondary || '#000000'}};
+`;
+
+const TaskItemCheckBox = styled(CheckBox)`
+    flex: 1;
+    padding: 10px;
+`;
+
+const ProjectTasksText = styled.Text`
+    color: ${props => props.theme.colors.textPrimary || '#000000'}};
+    margin-top: ${hp('3%')}px;
+    margin-bottom: ${hp('1%')}px;
+    margin-left: ${hp('2%')}px;
+
+    ${props => props.theme.fonts.size.gama}
+    text-transform: uppercase;
+`;
+
+
+
+
+
+const Txt = styled.Text`
+    color: #ffffff;
+`;
+
+
+
+
+
+const mapStateToProps = (state) => {
+    return{
+        PROJECT_INFO: state.PROJECT_INFO,
+        LOG_INFO: state.LOG_INFO
+    };
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        startCounter: () => dispatch(startCounter()),
+        updateCounter: (obj) => dispatch(updateCounter(obj)),
+        toggleTodo: (id, isChecked) => dispatch(toggleTodo(id, isChecked))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(LogsView));

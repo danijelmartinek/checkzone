@@ -25,19 +25,21 @@ const TextInfoContainer = styled.View`
 `;
 
 const TextDesc = styled.Text`
-    font-size: ${props => props.fontSize || hp('1.5%')}};
     margin-top: ${hp('3%')};
     opacity: 0.5;
-    color: #ffffff;
-    text-transform: ${props => props.uppercase? 'uppercase' : 'capitalize'}};
     align-items: center;
     text-align: center;
+
+    ${props => props.theme.fonts.size[props.fontSize || 'delta']}
+    color: ${props => props.theme.colors.textPrimary || '#ffffff'}};
+    text-transform: ${props => props.uppercase? 'uppercase' : 'capitalize'}};
 `;
 
 const TextMain = styled.Text`
-    font-size: ${props => props.fontSize || hp('2%')}};
-    color: #ffffff;
     text-transform: ${props => props.uppercase? 'uppercase' : 'capitalize'}};
+
+    ${props => props.theme.fonts.size[props.fontSize] || hp('2%')}
+    color: ${props => props.theme.colors.textPrimary || '#ffffff'}};
 `;
 
 export default TextInfo;

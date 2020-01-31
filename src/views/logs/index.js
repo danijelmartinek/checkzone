@@ -19,8 +19,9 @@ class LogsView extends React.Component {
 
 const LogsContainer = styled.View`
     flex: 1;
-    background-color: #101424;
+    background-color: ${props => props.theme.colors.primary || '#ffffff'}}; 
     padding: 0px;
 `;
+// #101424
 
 export default LogsView;
