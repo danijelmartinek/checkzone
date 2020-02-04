@@ -95,7 +95,7 @@ const TasksContainer = styled.ScrollView`
 const TaskItem = styled.View`
     width: ${wp('94%')};
     margin: ${wp('3%')}px;
-    background-color: ${props => props.theme.colors.secondary || '#000000'}};
+    background-color: ${props => props.theme.colors.secondary || '#000000'};
 `;
 
 const TaskItemCheckBox = styled(CheckBox)`

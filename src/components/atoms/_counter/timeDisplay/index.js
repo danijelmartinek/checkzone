@@ -59,8 +59,7 @@ class TimeDisplay extends React.Component {
                 time: {
                     seconds: pad(that.totalSeconds % 60),
                     minutes: pad(parseInt(that.totalMinutes % 60)),
-                    hours: pad(parseInt(that.totalMinutes / 60)),
-                    button: prevState.time.button,
+                    hours: pad(parseInt(that.totalMinutes / 60)),   
                 },
             }));
         }
@@ -82,6 +81,23 @@ class TimeDisplay extends React.Component {
             }));
         }
     };
+
+    resetCounter = () => {
+        this.totalSeconds = 0;
+        this.totalMinutes = 0;
+
+        this.setState(prevState => ({
+            time: {
+                seconds: '00',
+                minutes: '00',
+                hours: '00',
+            },
+        }));
+    }
+    
+    normalizeCounter = (sec) => {
+        this.totalSeconds = sec;
+    }
 
     render() {
         return (

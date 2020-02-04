@@ -7,6 +7,8 @@ import Reducer from '_redux/store.js';
 import Navigations from '_navigations/index.js';
 import Theme from '_styles/themeComponent/index.js';
 
+import { AlertProvider } from '_components/middleware/Alert.js';
+
 const store = createStore(Reducer);
 
 class App extends React.Component {
@@ -14,7 +16,9 @@ class App extends React.Component {
         return (
             <Provider store={store}>
                 <Theme>
-                    <Navigations></Navigations>
+                    <AlertProvider>
+                        <Navigations></Navigations>
+                    </AlertProvider>
                 </Theme>
             </Provider>
         );

@@ -38,7 +38,7 @@ class SelectedProject extends React.Component {
     
             this.props.onToggle();
         }
-    };
+    }
 
     render() {
         const interpolatedRotateAnimation = this._animatedValue.interpolate({

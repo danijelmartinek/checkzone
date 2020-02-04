@@ -3,17 +3,28 @@ import * as Font from 'expo-font';
 import {View} from 'react-native';
 
 import { connect } from 'react-redux'
-import { startCounter, resumeCounter, updateCounter } from '_redux/actions.js';
+import { startCounter, resumeCounter, updateCounter, refCounter } from '_redux/actions.js';
 
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from '_utils/dimensions.js';
 
-import TimeDisplay from '_atoms/_counter/timeDisplay/index.js';
+import TimeDisplay from '_atoms/_counter/timeDisplay/index.js'; 
 import TextButton from '_atoms/_counter/textButton/index.js';
 
 class Counter extends React.Component {
+    
+    async componentDidMount() {
+        await Font.loadAsync({
+            Speck: require('_assets/fonts/Speck.otf'),
+        });
+
+        this.setState({ fontLoaded: true });
+
+        this.props.refCounter(this);
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -23,14 +34,6 @@ class Counter extends React.Component {
         }
 
         this.timeDisplay = React.createRef();
-    }
-
-    async componentDidMount() {
-        await Font.loadAsync({
-            Speck: require('_assets/fonts/Speck.otf'),
-        });
-
-        this.setState({ fontLoaded: true });
     }
 
     toggleTime = () => {
@@ -106,6 +109,7 @@ const mapDispatchToProps = dispatch => {
         startCounter: () => dispatch(startCounter()),
         resumeCounter: () => dispatch(resumeCounter()),
         updateCounter: (obj) => dispatch(updateCounter(obj)),
+        refCounter: (ref) => dispatch(refCounter(ref)),
     }
 }
 

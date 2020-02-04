@@ -37,6 +37,13 @@ export function updateCounter(obj) {
 	}
 }
 
+export function refCounter(ref) {
+	return {
+		type: 'REF_COUNTER',
+		payload: ref
+	}
+}
+
 export function toggleTodo(todoId, isChecked) {
 	return { 
 		type: 'TOGGLE_TODO',

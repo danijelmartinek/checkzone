@@ -1,14 +1,17 @@
 import * as React from 'react';
+import { BackHandler, Text } from 'react-native';
 import styled, { withTheme } from 'styled-components';
 
+import { withAlert } from '_components/middleware/Alert.js';
+
 import { connect } from 'react-redux'
-import { startCounter, updateCounter, toggleTodo } from '_redux/actions.js';
+import { startCounter, stopCounter, updateCounter, toggleTodo } from '_redux/actions.js';
 
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from '_utils/dimensions.js';
-import { dateToHnM, subtractTime } from '_utils/time.js';
+import { dateToHnM, subtractTime, subtractTimeSeconds } from '_utils/time.js';
 
 import StatusBarBg from '_atoms/statusBarBg/index.js';
 import TopBar from '_atoms/topBar/index.js';
@@ -31,12 +34,28 @@ class LogsView extends React.Component {
         })
     }
 
+    componentDidMount() {
+        this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+            this.normalizeCounter();
+            this.props.navigation.goBack();
+            this.props.REF_COUNTER.toggleTime();
+
+            return true;
+        });
+    }
+
+    componentWillUnmount() {
+        this.backHandler.remove();
+    }
+
     constructor(props) {
         super(props);
 
         this.state = {
             tasks: this.props.PROJECT_INFO.tasks
         }
+
+        this.alert = React.createRef();
     }
 
     toggleTask = (index) => {
@@ -50,8 +69,52 @@ class LogsView extends React.Component {
                 return _task;
             })
         })
+    }
 
+    continueCounter = () => {
+        this.normalizeCounter();
+        this.props.navigation.goBack();
+        this.props.REF_COUNTER.toggleTime();
+    }
 
+    cancelCounter = () => {
+        this.props.alert.show({
+            text: "Log canceled!",
+            color: this.props.theme.colors.semantic.error,
+            textColor: "#ffffff",
+            animationDuration: 500,
+            duration: 3000
+        });
+
+        this.props.navigation.goBack();
+
+        setTimeout(() => { 
+            this.props.REF_COUNTER.timeDisplay.current.resetCounter();
+            this.props.stopCounter();
+        }, 500);
+    }
+
+    saveLog = () => {
+        this.props.alert.show({
+            text: "Log succesfully saved!",
+            color: this.props.theme.colors.semantic.success,
+            textColor: "#ffffff",
+            animationDuration: 500,
+            duration: 3000
+        });
+
+        this.props.navigation.goBack();
+
+        setTimeout(() => { 
+            this.props.REF_COUNTER.timeDisplay.current.resetCounter();
+            this.props.stopCounter();
+        }, 500);
+    }
+
+    normalizeCounter = () => {
+        return this.props.REF_COUNTER.timeDisplay.current.normalizeCounter(
+                subtractTimeSeconds(new Date().toISOString(), this.props.LOG_INFO.startTime)
+            );
     }
 
     render() {
@@ -122,7 +185,7 @@ class LogsView extends React.Component {
                     <HorizontalLine></HorizontalLine>
                     <ActionsWrapper>
                         <ActionButton 
-                            onPress={this._onPressButton}
+                            onPress={this.continueCounter}
                             activeOpacity={this.props.theme.options.activeOpacity} 
                             flex={1}
                         >
@@ -131,7 +194,7 @@ class LogsView extends React.Component {
                             </ActionButtonText>
                         </ActionButton>
                         <ActionButton 
-                            onPress={this._onPressButton}
+                            onPress={this.cancelCounter}
                             activeOpacity={this.props.theme.options.activeOpacity} 
                             flex={1}
                         >
@@ -140,7 +203,7 @@ class LogsView extends React.Component {
                             </ActionButtonText>
                         </ActionButton>
                         <ActionButton 
-                            onPress={this._onPressButton} 
+                            onPress={this.saveLog} 
                             activeOpacity={this.props.theme.options.activeOpacity} 
                             bgColor={this.props.theme.colors.semantic.success}
                             flex={1}
@@ -151,7 +214,6 @@ class LogsView extends React.Component {
                         </ActionButton>
                     </ActionsWrapper>
                 </ActionsContainer>
-                
             </LogContainer>
         );
     }
@@ -241,15 +303,17 @@ const Txt = styled.Text`
 const mapStateToProps = (state) => {
     return{
         PROJECT_INFO: state.PROJECT_INFO,
-        LOG_INFO: state.LOG_INFO
+        LOG_INFO: state.LOG_INFO,
+        REF_COUNTER: state.REF_COUNTER
     };
 }
 const mapDispatchToProps = dispatch => {
     return {
         startCounter: () => dispatch(startCounter()),
         updateCounter: (obj) => dispatch(updateCounter(obj)),
+        stopCounter: () => dispatch(stopCounter()),
         toggleTodo: (id, isChecked) => dispatch(toggleTodo(id, isChecked))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withTheme(LogsView));
+export default connect(mapStateToProps, mapDispatchToProps)(withTheme(withAlert(LogsView)));

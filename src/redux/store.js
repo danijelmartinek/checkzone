@@ -81,7 +81,7 @@ let projectInfo = {
     commits: []
 }
 
-let logInfo = {
+let initLogInfo = {
     active: false,
     startTime: '-',
     countTime: 0,
@@ -99,7 +99,9 @@ const initialState = {
     DEFAULT_THEME: initTheme(themeOptions, 'dark'),
 
     PROJECT_INFO: projects[0],
-    LOG_INFO: logInfo
+    LOG_INFO: {...initLogInfo},
+
+    REF_COUNTER: {}
 }
 
 const Reducer = (state = initialState, action) => {
@@ -117,6 +119,11 @@ const Reducer = (state = initialState, action) => {
                     active: true,
                     startTime: new Date(),
                 }
+            }
+        case 'STOP_COUNTER':
+            return {
+                ...state,
+                LOG_INFO: {...initLogInfo}
             }
         case 'RESUME_COUNTER':
             return {
@@ -137,6 +144,12 @@ const Reducer = (state = initialState, action) => {
                 ...state,
                 PROJECT_INFO: action.toggleTodo(state.PROJECT_INFO),
                 LOG_INFO: action.addTodoToLog(state.LOG_INFO, state.PROJECT_INFO)
+            }
+
+        case 'REF_COUNTER':
+            return {
+                ...state,
+                REF_COUNTER: action.payload
             }
 
         default:

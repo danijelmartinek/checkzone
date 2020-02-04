@@ -38,10 +38,19 @@ const subtractTime = (a, b) => {
     return secToString(diff);
 }
 
+const subtractTimeSeconds = (a, b) => {
+    const secA = new Date(a).getTime() / 1000;
+    const secB = new Date(b).getTime() / 1000;
+
+    let diff = secA - secB;
+    return Math.round(diff);
+}
+
 
 export {
     secToString,
     humanFormat,
     dateToHnM,
-    subtractTime
+    subtractTime,
+    subtractTimeSeconds
 };
