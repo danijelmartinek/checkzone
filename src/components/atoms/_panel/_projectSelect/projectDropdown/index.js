@@ -44,16 +44,18 @@ class ProjectDropdown extends React.Component {
         return (
             <Collapsible style={{paddingTop: hp('1%')}} collapsed={!this.props.isOpen}>
                 <ProjectDropdownWrapper {...this._panResponder.panHandlers} overScrollMode={'never'}>
-                    {this.props.projects.map((project, i) => (
-                        <ProjectOption key={i} activeOpacity={0.5} onPress={() => this.onProjectSelect(i, project)}>
-                            <ProjectTitle 
-                                color={project.color} 
-                                title={project.title} 
-                                colorScale={1}
-                                fontSize={'gama'}
-                            ></ProjectTitle>
-                        </ProjectOption>
-                    ))}
+                    {this.props.projects.map((project, i) => {
+                        return (project.id != this.props.selectedProjectId ? (
+                            <ProjectOption key={i} activeOpacity={0.5} onPress={() => this.onProjectSelect(i, project)}>
+                                <ProjectTitle 
+                                    color={project.labelColor} 
+                                    title={project.name} 
+                                    colorScale={1}
+                                    fontSize={'gama'}
+                                ></ProjectTitle>
+                            </ProjectOption>
+                        ) : (null))
+                    })}
                 </ProjectDropdownWrapper>
             </Collapsible>
         );

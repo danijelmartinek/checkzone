@@ -2,6 +2,8 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 import styled from 'styled-components';
 
+import Firebase from "_/database/firebase/setFunctions.js";
+
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -13,79 +15,93 @@ import Log from '_molecules/log/index.js';
 
 class Logs extends React.Component {
 
-    state = {
-        logs: [
-            {
-                date: '2020-01-13T00:05:32.000Z',
-                totalTime: 25128,
-                records: [
-                    {
-                        id: 8,
-                        project: {
-                            title: 'Project 11',
-                            color: '#ff0000'
-                        },
-                        time: 9945,
-                        pause: 2500,
-                        tasks: 4,
-                        github: {
-                            repo: false,
-                            commits: 0
+    async componentWillMount() {
+        let Logs = await Firebase.getAll('logs')
+        .then(res => {
+            return res.data;
+        })
+        .catch(err => {
+            console.log(err);
+        })
+
+        let Projects = await Firebase.getAll('projects')
+        .then(res => {
+            return res.data;
+        })
+        .catch(err => {
+            console.log(err);
+        })
+
+        Logs = await Logs.map(log => {
+            const startDate = new Date(log.startTime).setHours(0,0,0,0);
+            log.startTime = new Date(startDate).toISOString();
+            return log;
+        })
+
+        const groupBy = key => array =>
+        array.reduce((objectsByKeyValue, obj) => {
+            const value = obj[key];
+            objectsByKeyValue[value] = (objectsByKeyValue[value] || []).concat(obj);
+            return objectsByKeyValue;
+        }, {});
+
+        let AggLogs = groupBy('startTime')(Logs)
+        let OutLogs = [];
+
+        for (var key in AggLogs) {
+            if (AggLogs.hasOwnProperty(key)) {
+                OutLogs.push({
+                    date: key,
+                    totalTime: AggLogs[key].reduce((prev, cur) => prev += cur.totalSessionTime, 0),
+                    records: AggLogs[key].map(log => {
+                        return {
+                            id: log.id,
+                            project: {},
+                            time: log.totalSessionTime,
+                            pause: log.pauseTime,
+                            tasks: 0,
+                            github: {
+                                repo: false,
+                                commits: 0
+                            }
                         }
-                    },
-                    {
-                        id: 5,
-                        project: {
-                            title: 'Project 22',
-                            color: '#ffff00'
-                        },
-                        time: 12945,
-                        pause: 4500,
-                        tasks: 5,
-                        github: {
-                            repo: true,
-                            commits: 3
-                        }
-                    }
-                ]
-            },
-            {
-                date: '2020-01-07T00:05:32.000Z',
-                totalTime: 15128,
-                records: [
-                    {
-                        id: 1,
-                        project: {
-                            title: 'Project 55',
-                            color: '#ff00ff'
-                        },
-                        time: 7945,
-                        pause: 1560,
-                        tasks: 4,
-                        github: {
-                            repo: true,
-                            commits: 0
-                        }
-                    },
-                    {
-                        id: 2,
-                        project: {
-                            title: 'Project 123',
-                            color: '#ffffff'
-                        },
-                        time: 10045,
-                        pause: 3500,
-                        tasks: 3,
-                        github: {
-                            repo: false,
-                            commits: 0
-                        }
-                    }
-                ]
+                    })
+                })
+                // console.log(key, AggLogs[key]);
             }
-        ]
+        }
+
+        OutLogs = await OutLogs.map(x => {
+            x.records = x.records.map(y => {
+                let selProject = Projects.find(project => {
+                    if(project['logs']) {
+                        return project.logs.includes(y.id);
+                    }
+                })
+
+                y.project = {
+                    title: selProject.name,
+                    color: selProject.labelColor
+                }
+
+                return y;
+            }).reverse();
+
+            return x;
+        })
+
+        this.setState({
+            logs: OutLogs
+        })
     }
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            logs: []
+        }
+    }
     
 
     render() {

@@ -1,3 +1,6 @@
+import Firebase from "_/database/firebase/setFunctions.js"
+import { getTemplateData } from './initStates';
+
 export function setTheme(mode) {
 	return {
 		type: 'SET_THEME',
@@ -69,4 +72,56 @@ export function toggleTodo(todoId, isChecked) {
 			return logObj;
 		}
 	}
+}
+
+
+export function changeSelectedProject(project) {
+	return {
+		type: 'CHANGE_SELECTED_PROJECT',
+		changeProject: () => {
+			return Object.assign(getTemplateData("project"), project);
+		}
+	}
+}
+
+
+const getdata = async () => {
+
+	let options = await Firebase.options()
+	.then(data => {
+		return data;
+	})
+	.catch(err => {
+		console.log(err);
+	})
+
+	let projects = await Firebase.getAll('projects')
+	.then(res => {
+		return res.data;
+	})
+	.catch(err => {
+		console.log(err);
+	})
+
+	let selectedProject = projects.find(el => el.id === options.selectedProject);
+
+	return Promise.resolve({
+		options,
+		projects,
+		selectedProject
+	})
+}
+
+export function initData(dispatch) {
+	getdata()
+	.then(data => {
+		dispatch({
+			type: 'INIT_DATA',
+			options: data.options,
+			projects: data.projects,
+			selectedProject: () => {
+				return Object.assign(getTemplateData("project"), data.selectedProject);
+			}
+		})	
+	})
 }

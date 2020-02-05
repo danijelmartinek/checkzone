@@ -2,10 +2,11 @@ import * as React from 'react';
 import { BackHandler, Text } from 'react-native';
 import styled, { withTheme } from 'styled-components';
 
+import Firebase from "_/database/firebase/setFunctions.js";
 import { withAlert } from '_components/middleware/Alert.js';
 
 import { connect } from 'react-redux'
-import { startCounter, stopCounter, updateCounter, toggleTodo } from '_redux/actions.js';
+import { startCounter, stopCounter, updateCounter, toggleTodo, initData } from '_redux/actions.js';
 
 import {
     widthPercentageToDP as wp,
@@ -33,6 +34,12 @@ class LogsView extends React.Component {
             })
         })
     }
+
+    storeHighScore = (userId, score) => {
+        firebase.database().ref('users/' + userId).set({
+          highscore: score
+        });
+      }
 
     componentDidMount() {
         this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -95,20 +102,73 @@ class LogsView extends React.Component {
     }
 
     saveLog = () => {
-        this.props.alert.show({
-            text: "Log succesfully saved!",
-            color: this.props.theme.colors.semantic.success,
-            textColor: "#ffffff",
-            animationDuration: 500,
-            duration: 3000
-        });
+        const getId = (logString) => {
+            let a = String(logString).split("/");
+            return a[a.length - 1];
+        }
+        const log = this.props.LOG_INFO;
+
+        Firebase.save('logs', {
+            active: log.active,
+            startTime: String(log.startTime),
+            countTime: log.countTime,
+            endTime: String(log.endTime),
+            totalSessionTime: log.totalSessionTime,
+            pauseTime: log.pauseTime,
+            pauseEntities: log.pauseEntities,
+            tasks: log.tasks,
+            commits: log.commits
+        })
+        .then(logStr => {
+            
+            this.props.PROJECT_INFO.logs.push(getId(logStr));
+            this.props.PROJECT_INFO.timeInfo.totalTime = this.props.PROJECT_INFO.timeInfo.totalTime + log.totalSessionTime;
+
+            if(this.props.PROJECT_INFO.timeInfo.startTime === '') {
+                this.props.PROJECT_INFO.timeInfo.startTime = String(log.startTime);
+            }
+
+            Firebase.update('projects', this.props.PROJECT_INFO.id, 
+                this.props.PROJECT_INFO
+            )
+            .then(a => {
+
+                this.props.initData();
+
+                this.props.alert.show({
+                    text: "Log succesfully saved!",
+                    color: this.props.theme.colors.semantic.success,
+                    textColor: "#ffffff",
+                    animationDuration: 500,
+                    duration: 3000
+                });
+    
+                setTimeout(() => { 
+                    this.props.REF_COUNTER.timeDisplay.current.resetCounter();
+                    this.props.stopCounter();
+                }, 500);
+            })
+            .catch(err => {
+                this.props.alert.show({
+                    text: err.message,
+                    color: this.props.theme.colors.semantic.error,
+                    textColor: "#ffffff",
+                    animationDuration: 500,
+                    duration: 3000
+                });
+            })
+        })
+        .catch(err => {
+            this.props.alert.show({
+                text: err.message,
+                color: this.props.theme.colors.semantic.error,
+                textColor: "#ffffff",
+                animationDuration: 500,
+                duration: 3000
+            });
+        })
 
         this.props.navigation.goBack();
-
-        setTimeout(() => { 
-            this.props.REF_COUNTER.timeDisplay.current.resetCounter();
-            this.props.stopCounter();
-        }, 500);
     }
 
     normalizeCounter = () => {
@@ -304,7 +364,8 @@ const mapStateToProps = (state) => {
     return{
         PROJECT_INFO: state.PROJECT_INFO,
         LOG_INFO: state.LOG_INFO,
-        REF_COUNTER: state.REF_COUNTER
+        REF_COUNTER: state.REF_COUNTER,
+        ALL_PROJECTS: state.ALL_PROJECTS
     };
 }
 const mapDispatchToProps = dispatch => {
@@ -312,7 +373,8 @@ const mapDispatchToProps = dispatch => {
         startCounter: () => dispatch(startCounter()),
         updateCounter: (obj) => dispatch(updateCounter(obj)),
         stopCounter: () => dispatch(stopCounter()),
-        toggleTodo: (id, isChecked) => dispatch(toggleTodo(id, isChecked))
+        toggleTodo: (id, isChecked) => dispatch(toggleTodo(id, isChecked)),
+        initData: () => initData(dispatch),
     }
 }
 

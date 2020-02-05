@@ -2,10 +2,17 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { StatusBar } from 'react-native';
 
+import { connect } from 'react-redux'
+import { initData } from '_redux/actions.js';
+
 import Counter from '_molecules/counter/index.js';
 import Panel from '_organisms/panel/index.js';
 
 class Main extends React.Component {
+    componentWillMount() {
+        this.props.initData();
+    }
+
     render() {
         return (
             <MainContainer>
@@ -24,4 +31,10 @@ const MainContainer = styled.View`
     padding: 8px;
 `;
 
-export default Main;
+const mapDispatchToProps = dispatch => {
+    return {
+        initData: () => initData(dispatch),
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Main);
