@@ -77,17 +77,30 @@ class Logs extends React.Component {
                     if(project['logs']) {
                         return project.logs.includes(y.id);
                     }
+                    return false;
                 })
 
-                y.project = {
-                    title: selProject.name,
-                    color: selProject.labelColor
-                }
+                if(selProject) {
+                    y.project = {
+                        title: selProject.name,
+                        color: selProject.labelColor
+                    }
 
-                return y;
+                    return y;
+                } else {
+                    return null;
+                }
+            }).filter((el) => {
+                return el != null;
             }).reverse();
 
             return x;
+        }).filter((el) => {
+            return el.records[0] != null;
+        }).sort((a, b) => {
+            a = new Date(a.date);
+            b = new Date(b.date);
+            return a > b ? -1 : a < b ? 1 : 0;
         })
 
         this.setState({
@@ -138,10 +151,10 @@ const LogsDay = styled.View`
 
 const LogsDayText = styled.Text`
     flex: 1;
-    font-size: ${hp('3%')};
     color: ${props => props.theme.colors.textPrimary || '#ffffff'}};
     font-weight: bold;
     padding: ${hp('2%')}px 0px 0px ${hp('2%')}px;
+    ${props => props.theme.fonts.size.beta}
 `;
 
 const LogsTotalTime = styled.Text`

@@ -27,11 +27,11 @@ class Navigation extends React.Component {
                 text: 'Tasks',
                 icon: 'tasks'
             },
-            {
-                view: 'Tasks',
-                text: 'Statistics',
-                icon: 'chart-bar'
-            },
+            // {
+            //     view: 'Tasks',
+            //     text: 'Statistics',
+            //     icon: 'chart-bar'
+            // },
             {
                 view: 'Tasks',
                 text: 'Settings',

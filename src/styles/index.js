@@ -7,16 +7,16 @@ let Theme = {
     light: {
         label: 'light',
         colors: {
-            primary: '#101424',
-            secondary: '#272b39',
-            tertiary: '#ffffff',
+            primary: '#e1e1e1',
+            secondary: '#cacaca',
+            tertiary: '#b4b4b4',
             accent: 'purple',
-            textPrimary: "#ffffff",
-            textSecondary: '#e5e5e5',
+            textPrimary: "#161616",
+            textSecondary: '#434343',
 
             topBar: {
                 background: 'transparent',
-                text: '#ffffff'
+                text: '#161616'
             },
 
             semantic: {
@@ -31,8 +31,8 @@ let Theme = {
         label: 'dark',
         colors: {
             primary: '#101424',
-            secondary: '#272b39',
-            tertiary: '#ffffff',
+            secondary: '#181e36',
+            tertiary: '#272b39',
             accent: 'purple',
             textPrimary: "#ffffff",
             textSecondary: '#e5e5e5',

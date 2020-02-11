@@ -1,5 +1,5 @@
 import Firebase from "_/database/firebase/setFunctions.js"
-import { getTemplateData } from './initStates';
+import { getTemplateData } from './initStates.js';
 
 export function setTheme(mode) {
 	return {
@@ -89,21 +89,41 @@ const getdata = async () => {
 
 	let options = await Firebase.options()
 	.then(data => {
-		return data;
+		return Firebase.normalizeData('options', data);
 	})
 	.catch(err => {
 		console.log(err);
+		return Firebase.normalizeData('options');
 	})
 
 	let projects = await Firebase.getAll('projects')
 	.then(res => {
-		return res.data;
+		return res.data.map(project => {
+			return Firebase.normalizeData('project', project)
+		});
 	})
 	.catch(err => {
 		console.log(err);
 	})
 
-	let selectedProject = projects.find(el => el.id === options.selectedProject);
+	let tasks = await Firebase.getAll('tasks')
+	.then(res => {
+		return res.data.map(task => {
+			return Firebase.normalizeData('task', task)
+		});
+	})
+	.catch(err => {
+		console.log(err);
+	})
+
+	let selectedProject = await projects[0]
+	if(options.selectedProject){
+		selectedProject = projects.find(el => el.id === options.selectedProject) || projects[0];
+	}
+
+	selectedProject.tasks = await selectedProject.tasks.map(taskId => {
+		return tasks.find(task => task.id === taskId)
+	})
 
 	return Promise.resolve({
 		options,

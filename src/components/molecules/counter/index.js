@@ -93,7 +93,7 @@ class Counter extends React.Component {
                 ) : null}
 
                 <TextButton onPress={() => this.toggleTime()} fontSize={hp('6%')}>{this.state.mainButton}</TextButton>
-                <TextButton onPress={() => this.togglePause()} fontSize={hp('3%')}>{this.state.secondButton}</TextButton>
+                {/* <TextButton onPress={() => this.togglePause()} fontSize={hp('3%')}>{this.state.secondButton}</TextButton> */}
             </View>
         );
     }

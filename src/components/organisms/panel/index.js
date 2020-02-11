@@ -1,15 +1,11 @@
 import React from 'react';
+import Constants from 'expo-constants';
 import styled, { withTheme } from 'styled-components';
-import {
-    Animated,
-} from 'react-native';
 
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from '_utils/dimensions.js';
-
-import SlidingUpPanel from 'rn-sliding-up-panel';
 
 import HorizontalLine from '_atoms/horizontalLine/index.js';
 import Navigation from '_molecules/_panel/navigation/index.js';
@@ -18,101 +14,126 @@ import CurrentLogInfo from '_molecules/_panel/currentLogInfo/index.js';
 // import ProjectLogInfo from '_molecules/_panel/projectLogInfo/index.js';
 import ProjectTodo from '_molecules/_panel/projectTodo/index.js';
 
+import Animated from 'react-native-reanimated';
+const { block, call } = Animated;
+
+import BottomSheet from 'reanimated-bottom-sheet'
+
 class Panel extends React.Component {
-    static defaultProps = {
-        draggableRange: { top: hp('100%'), bottom: hp('7.5%') },
-    };
-    _draggedValue = new Animated.Value(hp('7.5%'));
-    closePanelEvent = () => {
-        this._panel.show({ toValue: hp('7.5%'), velocity: 3 });
-    };
+
+    value_fall = new Animated.Value(0);
+    bsPos = 0;
+
+    bottomSheetCallback = ([value]) => {
+        this.bsPos = Math.round(value * 10)
+
+        //console.log(value) -> to see which breakponts to include in togglePanel
+    }
 
     togglePanel = () => {
-        const { top } = this.props.draggableRange;
-        const maxPos = top - hp('7.5%');
-        const currentPanelValue = JSON.stringify(this._draggedValue);
-
-        if (currentPanelValue === String(hp('7.5%'))) {
-            this._panel.show(hp('20%'));
-        } else if (currentPanelValue === String(hp('20%'))) {
-            this._panel.show(maxPos);
-        } else {
-            this._panel.hide();
+        if(this.bsPos == 0) {
+            this.bs.current.snapTo(0);
+        } else if(this.bsPos == 8) {
+            this.bs.current.snapTo(2);
+        } else if(this.bsPos == 10) {
+            this.bs.current.snapTo(1);
         }
-    };
+    }
+
+
+    closePanelEvent = () => {
+        this.bs.current.snapTo(0);
+    }
+
+    renderInner = () => (
+        <ContentWrapper>
+            <Navigation
+                navigation={this.props.navigation}
+                closePanel={this.closePanelEvent}
+            ></Navigation>
+
+            <HorizontalLine/>
+
+            <ProjectSelect></ProjectSelect>
+
+            <CurrentLogInfo></CurrentLogInfo>
+
+            {/* <ProjectLogInfo></ProjectLogInfo> */}
+            
+            <ProjectTasksText>Tasks</ProjectTasksText>
+            <ProjectTodo></ProjectTodo>
+        </ContentWrapper>
+    )
+
+
+    renderHeader = () => (
+        <HookContainer
+            onPress={this.togglePanel}
+            activeOpacity={this.props.theme.options.activeOpacity}
+        >
+            <HookWrapper>
+                <Hook></Hook>
+            </HookWrapper>
+            <Animated.Code
+            exec={
+                block([
+                    call([this.value_fall], this.bottomSheetCallback),
+                ])
+
+            }/>
+        </HookContainer>
+    )
+
+    bs = React.createRef()
     
     render() {
-        const { top, bottom } = this.props.draggableRange;
-
         return (
-            <PanelContainer pointerEvents={'box-none'}>
-                <SlidingUpPanel
-                    ref={c => (this._panel = c)}
-                    draggableRange={{ top: top - hp('7.5%'), bottom: bottom }}
-                    animatedValue={this._draggedValue}
-                    snappingPoints={[hp('20%')]}
-                    friction={1}
-                    showBackdrop={false}
-                >
-                    <PanelWrapper>
-                        <HookContainer
-                            onPress={this.togglePanel}
-                            activeOpacity={this.props.theme.options.activeOpacity}
-                        >
-                            <HookWrapper>
-                                <Hook></Hook>
-                            </HookWrapper>
-                        </HookContainer>
-
-                        <Navigation
-                            navigation={this.props.navigation}
-                            closePanel={this.closePanelEvent}
-                        ></Navigation>
-
-                        <HorizontalLine/>
-
-                        <ProjectSelect></ProjectSelect>
-
-                        <CurrentLogInfo></CurrentLogInfo>
-
-                        {/* <ProjectLogInfo></ProjectLogInfo> */}
-                        
-                        <ProjectTasksText>Tasks</ProjectTasksText>
-                        <ProjectTodo></ProjectTodo>
-                    </PanelWrapper>
-                </SlidingUpPanel>
-            </PanelContainer>
+            <ContentContainer pointerEvents={'box-none'}>
+                <BottomSheet
+                    ref={this.bs}
+                    snapPoints={[hp('5%'), hp('20%'), hp('100%') - Constants.statusBarHeight]}
+                    renderContent={this.renderInner}
+                    renderHeader={this.renderHeader}
+                    enabledBottomClamp={true}
+                    enabledInnerScrolling={false}
+                    enabledContentTapInteraction={false}
+                    callbackNode={this.value_fall}      
+                />
+            </ContentContainer>
         );
     }
 }
 
-const PanelContainer = styled.View`
+const ContentContainer = styled.View`
     position: absolute;
+    bottom: 0px;
     height: ${hp('100%')};
     width: ${wp('100%')};
 `;
 
-const PanelWrapper = styled.View`
-    flex: 1;
-    position: relative;
+const ContentWrapper = styled.View`
+    height: ${hp('95%')};
+    width: ${wp('100%')};
     background-color: ${props => props.theme.colors.primary || '#ffffff'}};
-    border-top-left-radius: ${wp('5%')};
-    border-top-right-radius: ${wp('5%')};
 `;
 
 const HookContainer = styled.TouchableOpacity`
+    width: ${wp('100%')};
     opacity: ${props => props.theme.options.initialOpacity || 1};
+    background-color: ${props => props.theme.colors.primary || '#ffffff'}};
+    borderTopLeftRadius: ${hp('2%')};
+    borderTopRightRadius: ${hp('2%')};
 `;
 
 const HookWrapper = styled.View`
-    height: ${hp('8%')};
+    height: ${hp('5%')};
     width: ${wp('100%')};
     display: flex;
     justify-content: center;
 `;
 
 const Hook = styled.View`
-    height: ${hp('1%')};
+    height: ${hp('0.5%')};
     margin: 0px ${hp('24%')}px 0px ${hp('24%')}px;
     border-radius: ${hp('5%')};
     background-color: ${props => props.theme.colors.textPrimary || '#ffffff'}};

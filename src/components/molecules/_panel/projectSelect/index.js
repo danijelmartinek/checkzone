@@ -2,7 +2,7 @@ import React from 'react';
 
 import Firebase from "_/database/firebase/setFunctions.js"
 import { connect } from 'react-redux'
-import { changeSelectedProject } from '_redux/actions.js';
+import { changeSelectedProject, initData } from '_redux/actions.js';
 
 import SelectedProject from '_atoms/_panel/_projectSelect/selectedProject/index.js'
 import ProjectDropdown from '_atoms/_panel/_projectSelect/projectDropdown/index.js'
@@ -30,6 +30,7 @@ class ProjectSelect extends React.Component {
         Firebase.optionsUpdate({
             selectedProject: project.id
         });
+        this.props.initData();
 
         this.projectDropdownToggle();
     }
@@ -68,6 +69,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         changeSelectedProject: (obj) => dispatch(changeSelectedProject(obj)),
+        initData: () => initData(dispatch),
     }
 }
 

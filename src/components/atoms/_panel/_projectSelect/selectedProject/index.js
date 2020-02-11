@@ -4,6 +4,11 @@ import {
     Animated
 } from 'react-native';
 
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from '_utils/dimensions.js';
+
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import ProjectTitle from '_atoms/projectTitle/index.js';
@@ -53,6 +58,7 @@ class SelectedProject extends React.Component {
                     title={this.props.title}
                     colorScale={1}
                     fontSize={'beta'}
+                    charLimit={25}
                 ></ProjectTitle>
 
                 <Animated.View style={{ transform: [{rotate: interpolatedRotateAnimation}] }}>
@@ -75,6 +81,8 @@ const SelectedProjectWrapper = styled.TouchableOpacity`
     flexDirection: row;
     justifyContent: center;
     alignItems: center;
+    padding-left: ${wp('10%')}px;
+    padding-right: ${wp('10%')}px;
 `;
 
 export default withTheme(SelectedProject);

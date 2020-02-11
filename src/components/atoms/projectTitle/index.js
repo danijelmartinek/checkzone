@@ -12,7 +12,12 @@ class ProjectTitle extends React.Component {
             <ProjectTitleContainer align={this.props.align}>
                 <ProjectTitleWrapper scale={this.props.scale}>
                     <ProjectColor color={this.props.color} colorScale={this.props.colorScale}></ProjectColor>
-                    <ProjectTitleText textColor={this.props.textColor} fontSize={this.props.fontSize}>{this.props.title}</ProjectTitleText>
+                    <ProjectTitleText textColor={this.props.textColor} fontSize={this.props.fontSize}>
+                    { ((this.props.title).length > (this.props.charLimit || 20)) ? 
+                        (((this.props.title).substring(0, (this.props.charLimit || 20) - 3)) + '...') : 
+                        this.props.title 
+                    }
+                    </ProjectTitleText>
                 </ProjectTitleWrapper>
             </ProjectTitleContainer>
         );

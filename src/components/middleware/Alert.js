@@ -10,11 +10,14 @@ class AlertProvider extends React.Component {
             ...prevState,
             text: options.text,
             color: options.color,
+            accent: options.accent,
             textColor: options.textColor,
+            textSize: options.textSize,
             animationDuration: options.animationDuration,
             duration: options.duration,
-        }));
-        this.alert.current.show();
+        }),  () => {
+            this.alert.current.show();
+        });
     }
 
     constructor(props) {
@@ -23,9 +26,11 @@ class AlertProvider extends React.Component {
         this.state = {
             text: '',
             color: '',
+            accent: '',
             textColor: '',
-            animationDuration: 500,
-            duration: 2500,
+            textSize: '',
+            animationDuration: 0,
+            duration: 0,
             show: this.showAlert,
         };
 
@@ -38,14 +43,18 @@ class AlertProvider extends React.Component {
             <AlertContext.Provider value={this.state}>
                 {this.props.children}
 
-                <Alert 
-                    text={this.state.text}
-                    color={this.state.color}
-                    textColor={this.state.textColor}
-                    animationDuration={this.state.animationDuration}
-                    duration={this.state.duration}
-                    ref={this.alert}
-                ></Alert>
+                {this.state.animationDuration && this.state.duration ? (
+                    <Alert 
+                        text={this.state.text}
+                        color={this.state.color}
+                        accent={this.state.accent}
+                        textColor={this.state.textColor}
+                        textSize={this.state.textSize}
+                        animationDuration={this.state.animationDuration}
+                        duration={this.state.duration}
+                        ref={this.alert}
+                    ></Alert>
+                ) : null}
             </AlertContext.Provider>
         );
     }

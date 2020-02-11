@@ -40,6 +40,7 @@ const MainNavigator = createStackNavigator(
             screen: Main,
             navigationOptions: {
                 header: null,
+                headerShown: false
             },
         },
 

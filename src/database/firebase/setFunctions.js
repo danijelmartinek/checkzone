@@ -1,4 +1,5 @@
 import * as firebase from 'firebase';
+import { getTemplateData } from '_redux/initStates.js';
 
 const save = (col, data) => {
     return new Promise(function(resolve, reject) {
@@ -77,6 +78,27 @@ const update = (col, id, data) => {
 	});
 }
 
+const updateMultiple = (col, arr) => {
+    let updateObj = {};
+
+    arr.forEach(el => {
+        updateObj[el.id] = {...el};
+        delete updateObj[el.id].id;
+    });
+
+    return new Promise(function(resolve, reject) {
+		firebase.database().ref(col + '/').update(
+            updateObj
+        )
+        .then(ref => {
+            resolve(ref);
+        })
+        .catch(err => {
+            reject(err);
+        });
+	});
+}
+
 const options = () => {
     return new Promise(function(resolve, reject) {
 		firebase.database().ref("options/")
@@ -107,11 +129,21 @@ const optionsUpdate = (data) => {
 	});
 }
 
+const normalizeData = (type, data) => {
+    if(!data) {
+        return getTemplateData(type);
+    }
+
+    return Object.assign(getTemplateData(type), data)
+}
+
 export default {
     save,
     get,
     getAll,
     update,
+    updateMultiple,
     options,
-    optionsUpdate
+    optionsUpdate,
+    normalizeData
 };

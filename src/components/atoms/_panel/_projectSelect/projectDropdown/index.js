@@ -68,6 +68,8 @@ const ProjectDropdownWrapper = styled.ScrollView`
 
 const ProjectOption = styled.TouchableOpacity`
     margin: ${hp('0.5%')}px;
+    padding-left: ${wp('10%')}px;
+    padding-right: ${wp('10%')}px;
 `;
 
 export default ProjectDropdown;

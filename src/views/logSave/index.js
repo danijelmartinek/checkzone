@@ -20,6 +20,7 @@ import TopBar from '_atoms/topBar/index.js';
 import HorizontalLine from '_atoms/horizontalLine/index.js';
 import ProjectTitle from '_atoms/projectTitle/index.js';
 import TextInfo from '_atoms/_panel/textInfo/index.js';
+import Panel from '_atoms/panel/index.js';
 
 import CheckBox from 'react-native-check-box'
 
@@ -49,6 +50,7 @@ class LogsView extends React.Component {
 
             return true;
         });
+
     }
 
     componentWillUnmount() {
@@ -63,6 +65,7 @@ class LogsView extends React.Component {
         }
 
         this.alert = React.createRef();
+        this.actionPanel = React.createRef();
     }
 
     toggleTask = (index) => {
@@ -87,10 +90,12 @@ class LogsView extends React.Component {
     cancelCounter = () => {
         this.props.alert.show({
             text: "Log canceled!",
-            color: this.props.theme.colors.semantic.error,
-            textColor: "#ffffff",
-            animationDuration: 500,
-            duration: 3000
+            color: this.props.theme.colors.primary,
+            accent: this.props.theme.colors.semantic.error,
+            textColor: this.props.theme.colors.textPrimary,
+            textSize: this.props.theme.fonts.oSize.delta,
+            animationDuration: 200,
+            duration: 100000
         });
 
         this.props.navigation.goBack();
@@ -107,6 +112,7 @@ class LogsView extends React.Component {
             return a[a.length - 1];
         }
         const log = this.props.LOG_INFO;
+
 
         Firebase.save('logs', {
             active: log.active,
@@ -128,32 +134,47 @@ class LogsView extends React.Component {
                 this.props.PROJECT_INFO.timeInfo.startTime = String(log.startTime);
             }
 
-            Firebase.update('projects', this.props.PROJECT_INFO.id, 
-                this.props.PROJECT_INFO
+            let updatedProjectInfo = {...this.props.PROJECT_INFO};
+            updatedProjectInfo.tasks = updatedProjectInfo.tasks.map(task => task.id);
+
+            Firebase.update('projects', updatedProjectInfo.id, 
+                updatedProjectInfo
             )
             .then(a => {
 
-                this.props.initData();
+                Firebase.updateMultiple('tasks', this.props.PROJECT_INFO.tasks)
+                .then(b => {
+                    this.props.initData();
 
-                this.props.alert.show({
-                    text: "Log succesfully saved!",
-                    color: this.props.theme.colors.semantic.success,
-                    textColor: "#ffffff",
-                    animationDuration: 500,
-                    duration: 3000
-                });
-    
-                setTimeout(() => { 
-                    this.props.REF_COUNTER.timeDisplay.current.resetCounter();
-                    this.props.stopCounter();
-                }, 500);
+                    this.props.alert.show({
+                        text: "Log succesfully saved!",
+                        color: this.props.theme.colors.semantic.success,
+                        textColor: "#ffffff",
+                        animationDuration: 100,
+                        duration: 3000
+                    });
+        
+                    setTimeout(() => { 
+                        this.props.REF_COUNTER.timeDisplay.current.resetCounter();
+                        this.props.stopCounter();
+                    }, 500);
+                })
+                .catch(err => {
+                    this.props.alert.show({
+                        text: err.message,
+                        color: this.props.theme.colors.semantic.error,
+                        textColor: "#ffffff",
+                        animationDuration: 100,
+                        duration: 3000
+                    });
+                })
             })
             .catch(err => {
                 this.props.alert.show({
                     text: err.message,
                     color: this.props.theme.colors.semantic.error,
                     textColor: "#ffffff",
-                    animationDuration: 500,
+                    animationDuration: 100,
                     duration: 3000
                 });
             })
@@ -163,7 +184,7 @@ class LogsView extends React.Component {
                 text: err.message,
                 color: this.props.theme.colors.semantic.error,
                 textColor: "#ffffff",
-                animationDuration: 500,
+                animationDuration: 100,
                 duration: 3000
             });
         })
@@ -183,7 +204,16 @@ class LogsView extends React.Component {
                 <StatusBarBg></StatusBarBg>
                 {/* <TopBar navigation={this.props.navigation} name="Log"></TopBar> */}
 
-                
+                <Panel 
+                    height={hp('20%')}
+                    backgroundColor={'blue'}
+                    onSheetClose={() => {console.log('close')}}
+                    onSheetOpen={() => {console.log('open')}}
+                    ref={this.actionPanel}
+                >
+                    <Text>Lorem ipsum</Text>
+                </Panel>
+
                 <TitleContainer>
                     <ProjectTitle 
                         color={this.props.PROJECT_INFO.labelColor} 
@@ -249,7 +279,7 @@ class LogsView extends React.Component {
                             activeOpacity={this.props.theme.options.activeOpacity} 
                             flex={1}
                         >
-                            <ActionButtonText>
+                            <ActionButtonText color={this.props.theme.colors.textPrimary}>
                                 Continue
                             </ActionButtonText>
                         </ActionButton>
@@ -346,14 +376,6 @@ const ProjectTasksText = styled.Text`
 
     ${props => props.theme.fonts.size.gama}
     text-transform: uppercase;
-`;
-
-
-
-
-
-const Txt = styled.Text`
-    color: #ffffff;
 `;
 
 

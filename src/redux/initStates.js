@@ -32,10 +32,23 @@ const getTemplateData = (type) => {
         commits: []
     }
 
+    const initOptions = {
+        selectedProject: ''
+    }
+
+    const initTaskInfo = {
+        todo: '',
+        checked: false
+    }
+
     if(type === "project") {
         return initProjectInfo;
     } else if(type === "log") {
         return initLogInfo;
+    } else if(type === "task") {
+        return initTaskInfo;
+    } else if(type === "options") {
+        return initOptions;
     } else {
         return null;
     }
