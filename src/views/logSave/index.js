@@ -21,6 +21,7 @@ import HorizontalLine from '_atoms/horizontalLine/index.js';
 import ProjectTitle from '_atoms/projectTitle/index.js';
 import TextInfo from '_atoms/_panel/textInfo/index.js';
 import Panel from '_atoms/panel/index.js';
+import Spinner from '_atoms/spinner/index.js';
 
 import CheckBox from 'react-native-check-box'
 
@@ -50,6 +51,8 @@ class LogsView extends React.Component {
 
             return true;
         });
+
+        // this.actionPanel.current.openSheet();
 
     }
 
@@ -205,7 +208,7 @@ class LogsView extends React.Component {
                 {/* <TopBar navigation={this.props.navigation} name="Log"></TopBar> */}
 
                 <Panel 
-                    height={hp('20%')}
+                    height={hp('80%')}
                     backgroundColor={'blue'}
                     onSheetClose={() => {console.log('close')}}
                     onSheetOpen={() => {console.log('open')}}
@@ -268,7 +271,13 @@ class LogsView extends React.Component {
                         </TaskItem>
                     ))}
                 </TasksContainer>
-
+                
+                <Spinner
+                    speed={1000}
+                    size={100}
+                    color={'red'}
+                    direction={1}
+                ></Spinner>
                 <ProjectTasksText>Connect Commits -></ProjectTasksText>
                 
                 <ActionsContainer>

@@ -1,135 +1,170 @@
 import React from 'react'
-import { StyleSheet, View, TouchableWithoutFeedback } from 'react-native'
-import Constants from 'expo-constants';
+import Svg, { Path } from 'react-native-svg';
+import Animated, { Easing } from 'react-native-reanimated';
 
-import Svg, { Circle, Rect, Path } from 'react-native-svg';
+const AnimatedPath = Animated.createAnimatedComponent(Path);
+const {
+	Clock,
+	Value,
+	block,
+	clockRunning,
+	cond,
+	eq,
+	set,
+	startClock,
+	stopClock,
+	timing,
+} = Animated;
 
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from '_utils/dimensions.js';
 
-import Animated from 'react-native-reanimated';
-const { block, call, interpolate } = Animated;
-import BottomSheet from 'reanimated-bottom-sheet'
+const ANIMATION = {
+	ON: 1,
+	OFF: 0,
+};
 
-const SheetState = {
-  CLOSED: 0,
-  OPEN: 1,
-  UNDEFINED: 2
+function runTiming(clock, value, dest, duration) {
+	const state = {
+		finished: new Value(0),
+		position: new Value(0),
+		time: new Value(0), // set the current value of clock
+		frameTime: new Value(0),
+	};
+
+	const config = {
+		duration,
+		toValue: new Value(0),
+		easing: Easing.linear,
+	};
+
+  	const timeSyncedWithClock = new Value(0); // flag to track if we need to sync
+
+	return block([
+		cond(
+			clockRunning(clock),
+			// condition to sync the state.time with clock on first invocation
+			cond(eq(timeSyncedWithClock, 0), [
+				set(state.time, clock),
+				set(timeSyncedWithClock, 1), // set flag to not update this value second time
+			]),
+			[
+				set(timeSyncedWithClock, 0), // reset the flag
+				set(state.finished, 0),
+				set(state.time, clock), //set the current value of clock
+				set(state.position, value),
+				set(state.frameTime, 0),
+				set(config.toValue, dest),
+				startClock(clock),
+			],
+		),
+		timing(clock, state, config),
+		cond(state.finished, [
+			// we stop
+			stopClock(clock),
+			
+			// set flag ready to be restarted
+			set(state.finished, 0),
+			// same value as the initial defined in the state creation
+			set(state.position, 0),
+	
+			// very important to reset this ones !!! as mentioned in the doc about timing is saying
+			set(state.time, 0),
+			set(state.frameTime, 0),
+			
+			// and we restart
+			startClock(clock),
+		]),
+		state.position,
+	]);
+};
+
+const runOffset = (clock, value, duration, dest, active) => {
+	return block([
+		cond(eq(active, ANIMATION.ON), set(value, runTiming(clock, value, dest.end, duration))),
+	]);
+};
+
+class Spinner extends React.Component {
+
+	//--props-- : --default--
+	// speed : 1000
+	// size : 100
+	// color : gray
+	// direction : 0
+	// strokeWidth : 2
+	// opacity : 1
+
+	constructor(props) {
+		super(props)
+
+		this.clock = new Clock();
+		this.rotationOffset = new Value(0);
+		this.active = new Value(0);
+		this.startTime = null;
+	}
+
+	componentDidMount() {
+		this.startRotation();
+	}
+
+	startRotation = () => {
+		this.active.setValue(1);
+		this.startTime = new Date();
+	}
+
+	stopRotation = () => {
+		this.active.setValue(0);
+		this.rotationOffset.setValue(0);
+
+		// this.preventStopAnimationFlick(() => {
+		// 	this.active.setValue(0);
+		// 	this.rotationOffset.setValue(0);
+		// }, this.startTime, this.props.speed);
+	}
+
+	// //function that prevents loop flick if stopAnimation is not called in time that is multiple of loopDuration
+	// //allows smooth ending of animation
+	// preventStopAnimationFlick = (callback, startTime, loopDuration) => {
+	// 	const rotationTimeRounded = new Date() - startTime.getTime();
+	// 	let deltaMultiply = 0;
+
+	// 	if(rotationTimeRounded < loopDuration) {
+	// 		deltaMultiply = (loopDuration - rotationTimeRounded) / loopDuration;
+	// 	} 
+	// 	if(rotationTimeRounded > loopDuration) {
+	// 		deltaMultiply = rotationTimeRounded / loopDuration - Math.floor(rotationTimeRounded / loopDuration);
+	// 	}
+	// 	setTimeout(callback, deltaMultiply * loopDuration);
+	// }
+
+	render() {
+		return (
+			<React.Fragment>
+				<Animated.Code>
+				{() => 
+					block([
+						runOffset(this.clock, this.rotationOffset, this.props.speed || 1000, {
+							end: (this.props.direction === 1? 80: -80) || -80,
+							start: 0,
+						}, this.active)
+					])
+				}
+				</Animated.Code>
+
+				<Svg height={this.props.size || 100} width={this.props.size || 100} viewBox="0 0 40 40">
+					<AnimatedPath
+						d="M10,10 h20 v20 h-20 z" 
+						fill="transparent" 
+						opacity={this.props.opacity || 1}
+						stroke={this.props.color || 'gray'} 
+						strokeWidth={this.props.strokeWidth || 2} 
+						strokeDasharray="20, 20"
+						strokeLinecap="round"
+						strokeDashoffset={this.rotationOffset}
+					></AnimatedPath>
+				</Svg>
+			</React.Fragment>
+		)
+	}
 }
 
-class Panel extends React.Component {
-
-  // componentWillUnmount() {
-  //   this.setState({sheetState: SheetState.UNDEFINED});
-  //   this.setState({pointerEvents: 'box-only'});
-  //   this.bs.current.snapTo(0);
-  // }
-
-  // state = {
-  //   pointerEvents: 'box-none',
-  //   allowCancel: true,
-  //   sheetState: SheetState.UNDEFINED
-  // }
-
-  // value_fall = new Animated.Value(1);
-
-  // bottomSheetCallback = ([value]) => {
-  //   if(value < 0.5) {
-  //     this.setState({pointerEvents: 'box-only'});
-  //   } 
-  //   if(value > 0.5) {
-  //     this.setState({pointerEvents: 'box-none'});
-  //   }
-
-  //   //value => 0 -> closed, 1 -> open - because interpolation
-  //   if(this.state.sheetState === SheetState.CLOSED) {
-  //     if(value === 1) {
-  //       this.setState({sheetState: SheetState.OPEN});
-  //       this.props.onSheetClose();
-  //     }
-  //   }
-
-  //   if(this.state.sheetState === SheetState.OPEN || this.state.sheetState === SheetState.UNDEFINED) {
-  //     if(value === 0) {
-  //       this.setState({sheetState: SheetState.CLOSED});
-  //       this.props.onSheetOpen();
-  //     }
-  //   }
-
-  // }
-
-  // openSheet = () => {
-  //   this.bs.current.snapTo(1);
-  // }
-
-  // closeSheet = () => {
-  //   this.bs.current.snapTo(0);
-  // }
-
-  // closeSheetWithOpacity = () => {
-  //   if(this.state.allowCancel) {
-  //     this.bs.current.snapTo(0);
-  //   }
-  // }
-
-  // renderInner = () => (
-  //   <View
-  //     style={{
-  //       height: this.props.height - hp('2%'),
-  //       width: wp('95%'),
-  //       backgroundColor: this.props.backgroundColor || '#ffffff',
-  //       alignSelf: 'center',
-  //       borderRadius: hp('1%')
-  //     }}
-  //   >
-  //     {this.props.children}
-  //   </View>
-  // )
-
-  // bgOpacity = interpolate(this.value_fall, {
-  //   inputRange: [0, 1],
-  //   outputRange: [0.7, 0],
-  // })
-
-  // bs = React.createRef()
-  render() {
-    return (
-      <Animated.View
-          style={[
-          StyleSheet.absoluteFill,
-          { alignItems: 'center', justifyContent: 'center' },
-          ]}>
-          <Svg height="50%" width="50%" viewBox="0 0 100 100">
-              <Path 
-                  d="M50,50 h20  v20  h-20  v-20 z" 
-                  fill="transparent" 
-                  stroke="red" 
-                  strokeWidth="2" 
-                  strokeDasharray="20, 20"
-                  strokeLinecap="round"
-                  strokeDashoffset={this.state.rotateAnim.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [
-                        0, 80
-                      ]
-                  })}
-              />
-          </Svg>
-      </Animated.View>
-    )
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    position: 'absolute',
-    height: '100%',
-    width: '100%',
-    zIndex: 999,
-  }
-})
-
-export default Panel;
+export default Spinner;
